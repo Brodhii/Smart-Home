@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SmartHome — Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
 
@@ -14,20 +14,20 @@
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-icon">
+      <span class="logo-icon">
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M20 4L4 16v20h10V24h12v12h10V16L20 4z" fill="white" opacity="0.95"/>
           <circle cx="20" cy="17" r="3.5" fill="#4F46E5"/>
         </svg>
-      </div>
-      <div>
-        <span class="logo-main">SmartHome</span>
-        <span class="logo-sub">v2.0 — ESP32</span>
-      </div>
+      </span>
+      <hgroup class="logo-text">
+        <h1 class="logo-main">SmartHome</h1>
+        <p class="logo-sub">v2.0 — ESP32</p>
+      </hgroup>
     </div>
 
     <nav class="sidebar-nav">
-      <div class="nav-section-label">Menu Utama</div>
+      <h3 class="nav-section-label">Menu Utama</h3>
 
       <a class="nav-item active" onclick="setPage('dashboard')" href="javascript:void(0)">
         <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/></svg>
@@ -50,7 +50,7 @@
         <span class="nav-badge">3</span>
       </a>
 
-      <div class="nav-section-label" style="margin-top:8px;">Sistem</div>
+      <h3 class="nav-section-label" style="margin-top:8px;">Sistem</h3>
 
       <a class="nav-item" onclick="setPage('settings')" href="javascript:void(0)">
         <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
@@ -58,12 +58,12 @@
       </a>
     </nav>
 
-    <div class="sidebar-footer">
+    <footer class="sidebar-footer">
       <button class="logout-btn" onclick="logout()">
         <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
         Keluar
       </button>
-    </div>
+    </footer>
   </aside>
 
   <!-- Overlay for mobile -->
@@ -78,12 +78,12 @@
         <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
       </button>
 
-      <div class="navbar-brand">Smart<span>Home</span></div>
+      <h2 class="navbar-brand">Smart<span>Home</span></h2>
 
-      <div class="esp-status">
+      <span class="esp-status">
         <span class="esp-dot"></span>
         <span>ESP32 Online</span>
-      </div>
+      </span>
 
       <button class="btn-notif" onclick="toggleNotifPanel()">
         <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg>
@@ -96,308 +96,310 @@
         </svg>
       </button>
 
-      <div class="navbar-clock" id="navbar-clock">00:00:00</div>
+      <time class="navbar-clock" id="navbar-clock">00:00:00</time>
 
-      <div class="user-avatar" title="Administrator">A</div>
+      <span class="user-avatar" title="Administrator">A</span>
     </header>
 
     <!-- PAGE CONTENT -->
     <main class="page-content">
 
       <!-- ======================== PAGE: DASHBOARD ======================== -->
-      <div id="page-dashboard" class="tab-panel active fade-in">
+      <section id="page-dashboard" class="tab-panel active fade-in">
 
         <!-- Notification Alert -->
-        <div class="alert-banner warning" id="alert-gas" style="display:none">
+        <aside class="alert-banner warning" id="alert-gas" style="display:none">
           <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-          ⚠️ Peringatan: Kadar gas terdeteksi tinggi! Segera cek kondisi rumah.
+          <span>⚠️ Peringatan: Kadar gas terdeteksi tinggi! Segera cek kondisi rumah.</span>
           <button class="alert-banner-close" onclick="this.parentElement.style.display='none'">✕</button>
-        </div>
+        </aside>
 
         <!-- Welcome Hero -->
-        <div class="welcome-hero">
-          <div class="welcome-text">
-            <div class="welcome-greeting">Selamat Datang Kembali,</div>
-            <div class="welcome-name">Administrator 👋</div>
-            <div class="welcome-status">
+        <section class="welcome-hero">
+          <hgroup class="welcome-text">
+            <p class="welcome-greeting">Selamat Datang Kembali,</p>
+            <h2 class="welcome-name">Administrator 👋</h2>
+            <p class="welcome-status">
               <span class="welcome-status-dot"></span>
               Semua sistem berjalan normal — Rumah aman terpantau
-            </div>
-          </div>
-          <div class="welcome-house">🏠</div>
-        </div>
+            </p>
+          </hgroup>
+          <span class="welcome-house">🏠</span>
+        </section>
 
         <!-- Stats Grid -->
-        <div class="stats-grid">
-          <div class="stat-card primary card-animate" style="animation-delay:0.05s">
-            <div class="stat-icon primary">📡</div>
+        <section class="stats-grid">
+          <article class="stat-card primary card-animate" style="animation-delay:0.05s">
+            <span class="stat-icon primary">📡</span>
             <div class="stat-info">
-              <div class="stat-label">Total Sensor</div>
-              <div class="stat-val">5</div>
-              <div class="stat-sub">Aktif semua</div>
+              <h3 class="stat-label">Total Sensor</h3>
+              <p class="stat-val">5</p>
+              <p class="stat-sub">Aktif semua</p>
             </div>
-          </div>
-          <div class="stat-card success card-animate" style="animation-delay:0.1s">
-            <div class="stat-icon success">⚡</div>
+          </article>
+          <article class="stat-card success card-animate" style="animation-delay:0.1s">
+            <span class="stat-icon success">⚡</span>
             <div class="stat-info">
-              <div class="stat-label">Perangkat Aktif</div>
-              <div class="stat-val">3</div>
-              <div class="stat-sub">Relay, Servo, Stepper</div>
+              <h3 class="stat-label">Perangkat Aktif</h3>
+              <p class="stat-val">3</p>
+              <p class="stat-sub">Relay, Servo, Stepper</p>
             </div>
-          </div>
-          <div class="stat-card warning card-animate" style="animation-delay:0.15s">
-            <div class="stat-icon warning">🔒</div>
+          </article>
+          <article class="stat-card warning card-animate" style="animation-delay:0.15s">
+            <span class="stat-icon warning">🔒</span>
             <div class="stat-info">
-              <div class="stat-label">Status Keamanan</div>
-              <div class="stat-val" style="font-size:18px;margin-top:2px">Aman</div>
-              <div class="stat-sub">Pintu terkunci</div>
+              <h3 class="stat-label">Status Keamanan</h3>
+              <p class="stat-val" style="font-size:18px;margin-top:2px">Aman</p>
+              <p class="stat-sub">Pintu terkunci</p>
             </div>
-          </div>
-          <div class="stat-card info card-animate" style="animation-delay:0.2s">
-            <div class="stat-icon info">🌤️</div>
+          </article>
+          <article class="stat-card info card-animate" style="animation-delay:0.2s">
+            <span class="stat-icon info">🌤️</span>
             <div class="stat-info">
-              <div class="stat-label">Status Cuaca</div>
-              <div class="stat-val" style="font-size:18px;margin-top:2px">Cerah</div>
-              <div class="stat-sub">Tidak ada hujan</div>
+              <h3 class="stat-label">Status Cuaca</h3>
+              <p class="stat-val" style="font-size:18px;margin-top:2px">Cerah</p>
+              <p class="stat-sub">Tidak ada hujan</p>
             </div>
-          </div>
-        </div>
+          </article>
+        </section>
 
         <!-- Sensor summary mini -->
-        <div class="sensors-grid">
+        <section class="sensors-grid">
           <!-- Gas -->
-          <div class="sensor-card sensor-gas card-animate" style="animation-delay:0.1s">
+          <article class="sensor-card sensor-gas card-animate" style="animation-delay:0.1s">
             <div class="sensor-card-header">
-              <div class="sensor-icon-wrap">💨</div>
+              <span class="sensor-icon-wrap">💨</span>
               <span class="sensor-badge badge-normal" id="gas-badge">Normal</span>
             </div>
-            <div class="sensor-name">Gas MQ-135</div>
-            <div><span class="sensor-value" id="gas-val">142</span><span class="sensor-unit">ppm</span></div>
-            <div class="sensor-desc">Kualitas udara baik</div>
-            <div class="sensor-progress"><div class="sensor-progress-fill" id="gas-bar" style="width:28%"></div></div>
-          </div>
+            <h3 class="sensor-name">Gas MQ-135</h3>
+            <p><span class="sensor-value" id="gas-val">142</span><span class="sensor-unit">ppm</span></p>
+            <p class="sensor-desc">Kualitas udara baik</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="gas-bar" style="width:28%"></div></div>
+          </article>
 
           <!-- Light -->
-          <div class="sensor-card sensor-light card-animate" style="animation-delay:0.15s">
+          <article class="sensor-card sensor-light card-animate" style="animation-delay:0.15s">
             <div class="sensor-card-header">
-              <div class="sensor-icon-wrap">💡</div>
+              <span class="sensor-icon-wrap">💡</span>
               <span class="sensor-badge badge-warning" id="light-badge">Redup</span>
             </div>
-            <div class="sensor-name">Cahaya LDR</div>
-            <div><span class="sensor-value" id="light-val">34</span><span class="sensor-unit">%</span></div>
-            <div class="sensor-desc">Kondisi pencahayaan rendah</div>
-            <div class="sensor-progress"><div class="sensor-progress-fill" id="light-bar" style="width:34%"></div></div>
-          </div>
+            <h3 class="sensor-name">Cahaya LDR</h3>
+            <p><span class="sensor-value" id="light-val">34</span><span class="sensor-unit">%</span></p>
+            <p class="sensor-desc">Kondisi pencahayaan rendah</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="light-bar" style="width:34%"></div></div>
+          </article>
 
           <!-- Rain -->
-          <div class="sensor-card sensor-rain card-animate" style="animation-delay:0.2s">
+          <article class="sensor-card sensor-rain card-animate" style="animation-delay:0.2s">
             <div class="sensor-card-header">
-              <div class="sensor-icon-wrap">🌧️</div>
+              <span class="sensor-icon-wrap">🌧️</span>
               <span class="sensor-badge badge-normal" id="rain-badge">Tidak Hujan</span>
             </div>
-            <div class="sensor-name">Sensor Hujan</div>
-            <div><span class="sensor-value" id="rain-val">0</span><span class="sensor-unit">%</span></div>
-            <div class="sensor-desc">Cuaca cerah, jemuran aman</div>
-            <div class="sensor-progress"><div class="sensor-progress-fill" id="rain-bar" style="width:0%"></div></div>
-          </div>
+            <h3 class="sensor-name">Sensor Hujan</h3>
+            <p><span class="sensor-value" id="rain-val">0</span><span class="sensor-unit">%</span></p>
+            <p class="sensor-desc">Cuaca cerah, jemuran aman</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="rain-bar" style="width:0%"></div></div>
+          </article>
 
           <!-- Ultrasonic -->
-          <div class="sensor-card sensor-ultrasonic card-animate" style="animation-delay:0.25s">
+          <article class="sensor-card sensor-ultrasonic card-animate" style="animation-delay:0.25s">
             <div class="sensor-card-header">
-              <div class="sensor-icon-wrap">📡</div>
+              <span class="sensor-icon-wrap">📡</span>
               <span class="sensor-badge badge-info" id="ultra-badge">Clear</span>
             </div>
-            <div class="sensor-name">Ultrasonik HC-SR04</div>
-            <div><span class="sensor-value" id="ultra-val">85</span><span class="sensor-unit">cm</span></div>
-            <div class="sensor-desc">Tidak ada objek terdeteksi</div>
-            <div class="sensor-progress"><div class="sensor-progress-fill" id="ultra-bar" style="width:15%"></div></div>
-          </div>
+            <h3 class="sensor-name">Ultrasonik HC-SR04</h3>
+            <p><span class="sensor-value" id="ultra-val">85</span><span class="sensor-unit">cm</span></p>
+            <p class="sensor-desc">Tidak ada objek terdeteksi</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="ultra-bar" style="width:15%"></div></div>
+          </article>
 
           <!-- RFID -->
-          <div class="sensor-card sensor-rfid card-animate" style="animation-delay:0.3s">
+          <article class="sensor-card sensor-rfid card-animate" style="animation-delay:0.3s">
             <div class="sensor-card-header">
-              <div class="sensor-icon-wrap">🔑</div>
+              <span class="sensor-icon-wrap">🔑</span>
               <span class="sensor-badge badge-normal" id="rfid-badge">Aktif</span>
             </div>
-            <div class="sensor-name">RFID RC522</div>
-            <div><span class="sensor-value" style="font-size:20px;letter-spacing:1px">A4:B2</span></div>
-            <div class="sensor-desc">UID terakhir — Akses berhasil</div>
-            <div class="sensor-progress"><div class="sensor-progress-fill" style="width:100%"></div></div>
-          </div>
+            <h3 class="sensor-name">RFID RC522</h3>
+            <p><span class="sensor-value" style="font-size:20px;letter-spacing:1px">A4:B2</span></p>
+            <p class="sensor-desc">UID terakhir — Akses berhasil</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:100%"></div></div>
+          </article>
 
           <!-- System Status -->
-          <div class="sensor-card card-animate" style="animation-delay:0.35s; background: linear-gradient(135deg, var(--primary), #3730A3);">
+          <article class="sensor-card card-animate" style="animation-delay:0.35s; background: linear-gradient(135deg, var(--primary), #3730A3);">
             <div class="sensor-card-header">
-              <div class="sensor-icon-wrap" style="background:rgba(255,255,255,0.15);">🏠</div>
+              <span class="sensor-icon-wrap" style="background:rgba(255,255,255,0.15);">🏠</span>
               <span class="sensor-badge" style="background:rgba(255,255,255,0.15);color:white">Online</span>
             </div>
-            <div class="sensor-name" style="color:rgba(255,255,255,0.8)">Status Sistem</div>
-            <div style="font-size:24px;font-weight:700;color:white">ESP32</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:6px">Firebase Connected</div>
-            <div class="sensor-progress" style="background:rgba(255,255,255,0.15)">
+            <h3 class="sensor-name" style="color:rgba(255,255,255,0.8)">Status Sistem</h3>
+            <p style="font-size:24px;font-weight:700;color:white">ESP32</p>
+            <p style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:6px">Firebase Connected</p>
+            <div class="sensor-progress" style="background:rgba(255,255,255,0.15)" role="progressbar" aria-valuemin="0" aria-valuemax="100">
               <div class="sensor-progress-fill" style="width:100%;background:rgba(255,255,255,0.6)"></div>
             </div>
-          </div>
-        </div>
+          </article>
+        </section>
 
         <!-- Notification panel -->
-        <div class="notif-panel" id="notif-panel" style="display:none">
+        <aside class="notif-panel" id="notif-panel" style="display:none">
           <div class="notif-panel-header">
             Notifikasi Realtime
             <button onclick="document.getElementById('notif-panel').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:18px;">✕</button>
           </div>
-          <div class="notif-item">
-            <div class="notif-dot" style="background:var(--success)"></div>
-            <div class="notif-text">Akses RFID berhasil — UID: A4:B2:C9:D1</div>
-            <div class="notif-time">2 mnt lalu</div>
-          </div>
-          <div class="notif-item">
-            <div class="notif-dot" style="background:var(--warning)"></div>
-            <div class="notif-text">Cahaya ruangan rendah — Lampu otomatis ON</div>
-            <div class="notif-time">8 mnt lalu</div>
-          </div>
-          <div class="notif-item">
-            <div class="notif-dot" style="background:var(--blue)"></div>
-            <div class="notif-text">Jemuran otomatis masuk — Hujan terdeteksi</div>
-            <div class="notif-time">1 jam lalu</div>
-          </div>
-        </div>
+          <ul class="notif-list" style="list-style:none;padding:0;margin:0">
+            <li class="notif-item">
+              <span class="notif-dot" style="background:var(--success)"></span>
+              <p class="notif-text">Akses RFID berhasil — UID: A4:B2:C9:D1</p>
+              <time class="notif-time">2 mnt lalu</time>
+            </li>
+            <li class="notif-item">
+              <span class="notif-dot" style="background:var(--warning)"></span>
+              <p class="notif-text">Cahaya ruangan rendah — Lampu otomatis ON</p>
+              <time class="notif-time">8 mnt lalu</time>
+            </li>
+            <li class="notif-item">
+              <span class="notif-dot" style="background:var(--blue)"></span>
+              <p class="notif-text">Jemuran otomatis masuk — Hujan terdeteksi</p>
+              <time class="notif-time">1 jam lalu</time>
+            </li>
+          </ul>
+        </aside>
 
-      </div><!-- /page-dashboard -->
+      </section><!-- /page-dashboard -->
 
 
       <!-- ======================== PAGE: MONITORING ======================== -->
-      <div id="page-monitoring" class="tab-panel">
-        <div class="page-header">
-          <div class="page-title">Monitoring Sensor</div>
-          <div class="page-subtitle">Data realtime dari semua sensor yang terhubung ke ESP32</div>
-        </div>
+      <section id="page-monitoring" class="tab-panel">
+        <header class="page-header">
+          <h2 class="page-title">Monitoring Sensor</h2>
+          <p class="page-subtitle">Data realtime dari semua sensor yang terhubung ke ESP32</p>
+        </header>
 
-        <div class="sensors-grid">
+        <section class="sensors-grid">
           <!-- Gas MQ-135 detail -->
-          <div class="sensor-card sensor-gas">
+          <article class="sensor-card sensor-gas">
             <div class="sensor-card-header">
-              <div class="sensor-icon-wrap" style="font-size:28px;">💨</div>
+              <span class="sensor-icon-wrap" style="font-size:28px;">💨</span>
               <span class="sensor-badge badge-normal">Normal</span>
             </div>
-            <div class="sensor-name">Gas MQ-135</div>
-            <div><span class="sensor-value" id="m-gas-val">142</span><span class="sensor-unit">ppm</span></div>
-            <div class="sensor-desc">Batas aman: &lt; 400 ppm</div>
-            <div class="sensor-progress"><div class="sensor-progress-fill" style="width:35%"></div></div>
+            <h3 class="sensor-name">Gas MQ-135</h3>
+            <p><span class="sensor-value" id="m-gas-val">142</span><span class="sensor-unit">ppm</span></p>
+            <p class="sensor-desc">Batas aman: &lt; 400 ppm</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:35%"></div></div>
             <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
               <span style="font-size:11.5px;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--text-muted)">Min: 98</span>
               <span style="font-size:11.5px;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--text-muted)">Max: 210</span>
               <span style="font-size:11.5px;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--text-muted)">Avg: 145</span>
             </div>
-          </div>
+          </article>
 
           <!-- LDR -->
-          <div class="sensor-card sensor-light">
+          <article class="sensor-card sensor-light">
             <div class="sensor-card-header">
-              <div class="sensor-icon-wrap" style="font-size:28px;">☀️</div>
+              <span class="sensor-icon-wrap" style="font-size:28px;">☀️</span>
               <span class="sensor-badge badge-warning">Redup</span>
             </div>
-            <div class="sensor-name">Cahaya LDR</div>
-            <div><span class="sensor-value" id="m-light-val">34</span><span class="sensor-unit">%</span></div>
-            <div class="sensor-desc">Kondisi: Pencahayaan Rendah</div>
-            <div class="sensor-progress"><div class="sensor-progress-fill" style="width:34%"></div></div>
-            <div style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">🔆 Lampu otomatis diaktifkan</div>
-          </div>
+            <h3 class="sensor-name">Cahaya LDR</h3>
+            <p><span class="sensor-value" id="m-light-val">34</span><span class="sensor-unit">%</span></p>
+            <p class="sensor-desc">Kondisi: Pencahayaan Rendah</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:34%"></div></div>
+            <p style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">🔆 Lampu otomatis diaktifkan</p>
+          </article>
 
           <!-- Rain -->
-          <div class="sensor-card sensor-rain">
+          <article class="sensor-card sensor-rain">
             <div class="sensor-card-header">
-              <div class="sensor-icon-wrap" style="font-size:28px;">🌦️</div>
+              <span class="sensor-icon-wrap" style="font-size:28px;">🌦️</span>
               <span class="sensor-badge badge-normal">Tidak Hujan</span>
             </div>
-            <div class="sensor-name">Sensor Hujan</div>
-            <div><span class="sensor-value" id="m-rain-val">0</span><span class="sensor-unit">%</span></div>
-            <div class="sensor-desc">Intensitas: Tidak ada</div>
-            <div class="sensor-progress"><div class="sensor-progress-fill" style="width:0%"></div></div>
-            <div style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">☀️ Cuaca cerah — Jemuran aman di luar</div>
-          </div>
+            <h3 class="sensor-name">Sensor Hujan</h3>
+            <p><span class="sensor-value" id="m-rain-val">0</span><span class="sensor-unit">%</span></p>
+            <p class="sensor-desc">Intensitas: Tidak ada</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:0%"></div></div>
+            <p style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">☀️ Cuaca cerah — Jemuran aman di luar</p>
+          </article>
 
           <!-- Ultrasonic -->
-          <div class="sensor-card sensor-ultrasonic">
+          <article class="sensor-card sensor-ultrasonic">
             <div class="sensor-card-header">
-              <div class="sensor-icon-wrap" style="font-size:28px;">📻</div>
+              <span class="sensor-icon-wrap" style="font-size:28px;">📻</span>
               <span class="sensor-badge badge-info">Clear</span>
             </div>
-            <div class="sensor-name">Ultrasonik HC-SR04</div>
-            <div><span class="sensor-value" id="m-ultra-val">85</span><span class="sensor-unit">cm</span></div>
-            <div class="sensor-desc">Deteksi objek: Tidak ada</div>
-            <div class="sensor-progress"><div class="sensor-progress-fill" style="width:15%"></div></div>
-            <div style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">📏 Jarak aman &gt; 30 cm</div>
-          </div>
+            <h3 class="sensor-name">Ultrasonik HC-SR04</h3>
+            <p><span class="sensor-value" id="m-ultra-val">85</span><span class="sensor-unit">cm</span></p>
+            <p class="sensor-desc">Deteksi objek: Tidak ada</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:15%"></div></div>
+            <p style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">📏 Jarak aman &gt; 30 cm</p>
+          </article>
 
           <!-- RFID -->
-          <div class="sensor-card sensor-rfid" style="grid-column:span 2">
+          <article class="sensor-card sensor-rfid" style="grid-column:span 2">
             <div class="sensor-card-header">
-              <div class="sensor-icon-wrap" style="font-size:28px;">🪪</div>
+              <span class="sensor-icon-wrap" style="font-size:28px;">🪪</span>
               <span class="sensor-badge badge-normal">Aktif</span>
             </div>
-            <div class="sensor-name">RFID RC522</div>
-            <div style="display:flex;gap:24px;align-items:flex-end;flex-wrap:wrap">
+            <h3 class="sensor-name">RFID RC522</h3>
+            <dl class="rfid-details" style="display:flex;gap:24px;align-items:flex-end;flex-wrap:wrap;margin:0">
               <div>
-                <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">UID Terakhir</div>
-                <div style="font-size:24px;font-weight:700;font-family:monospace;color:var(--text);letter-spacing:2px">A4:B2:C9:D1</div>
+                <dt style="font-size:12px;color:var(--text-muted);margin-bottom:4px">UID Terakhir</dt>
+                <dd style="font-size:24px;font-weight:700;font-family:monospace;color:var(--text);letter-spacing:2px;margin:0">A4:B2:C9:D1</dd>
               </div>
               <div>
-                <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Status Akses</div>
-                <span class="sensor-badge badge-normal" style="font-size:13px;padding:5px 14px">✅ Berhasil</span>
+                <dt style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Status Akses</dt>
+                <dd style="margin:0"><span class="sensor-badge badge-normal" style="font-size:13px;padding:5px 14px">✅ Berhasil</span></dd>
               </div>
               <div>
-                <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Waktu Tap</div>
-                <div style="font-size:14px;font-weight:600;color:var(--text)">14:32:07</div>
+                <dt style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Waktu Tap</dt>
+                <dd style="font-size:14px;font-weight:600;color:var(--text);margin:0">14:32:07</dd>
               </div>
-            </div>
-            <div style="margin-top:20px">
-              <div style="font-size:12.5px;font-weight:600;color:var(--text-muted);margin-bottom:10px">Log Akses RFID</div>
-              <div style="display:flex;flex-direction:column;gap:8px">
-                <div style="display:flex;justify-content:space-between;font-size:12.5px;padding:8px 12px;background:var(--bg);border-radius:8px">
+            </dl>
+            <section style="margin-top:20px">
+              <h4 style="font-size:12.5px;font-weight:600;color:var(--text-muted);margin-bottom:10px">Log Akses RFID</h4>
+              <ul style="display:flex;flex-direction:column;gap:8px;list-style:none;padding:0;margin:0">
+                <li style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:8px 12px;background:var(--bg);border-radius:8px">
                   <span style="font-family:monospace">A4:B2:C9:D1</span>
                   <span class="table-badge success">Berhasil</span>
-                  <span style="color:var(--text-muted)">14:32:07</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;font-size:12.5px;padding:8px 12px;background:var(--bg);border-radius:8px">
+                  <time style="color:var(--text-muted)">14:32:07</time>
+                </li>
+                <li style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:8px 12px;background:var(--bg);border-radius:8px">
                   <span style="font-family:monospace">FF:22:AB:09</span>
                   <span class="table-badge danger">Ditolak</span>
-                  <span style="color:var(--text-muted)">14:18:44</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;font-size:12.5px;padding:8px 12px;background:var(--bg);border-radius:8px">
+                  <time style="color:var(--text-muted)">14:18:44</time>
+                </li>
+                <li style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:8px 12px;background:var(--bg);border-radius:8px">
                   <span style="font-family:monospace">A4:B2:C9:D1</span>
                   <span class="table-badge success">Berhasil</span>
-                  <span style="color:var(--text-muted)">08:05:12</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div><!-- /page-monitoring -->
+                  <time style="color:var(--text-muted)">08:05:12</time>
+                </li>
+              </ul>
+            </section>
+          </article>
+        </section>
+      </section><!-- /page-monitoring -->
 
 
       <!-- ======================== PAGE: CONTROL ======================== -->
-      <div id="page-control" class="tab-panel">
-        <div class="page-header">
-          <div class="page-title">Kontrol Perangkat</div>
-          <div class="page-subtitle">Kendalikan semua aktuator dari sini — perubahan dikirim ke ESP32 via Firebase</div>
-        </div>
+      <section id="page-control" class="tab-panel">
+        <header class="page-header">
+          <h2 class="page-title">Kontrol Perangkat</h2>
+          <p class="page-subtitle">Kendalikan semua aktuator dari sini — perubahan dikirim ke ESP32 via Firebase</p>
+        </header>
 
-        <div class="control-grid">
+        <section class="control-grid">
 
           <!-- Jemuran Otomatis -->
-          <div class="control-card">
+          <article class="control-card">
             <div class="control-header">
-              <div class="control-icon" style="background:rgba(59,130,246,0.1);font-size:24px;">👕</div>
-              <div>
-                <div class="control-title">Jemuran Otomatis</div>
-                <div class="control-subtitle">Motor Stepper 28BYJ-48</div>
-              </div>
+              <span class="control-icon" style="background:rgba(59,130,246,0.1);font-size:24px;">👕</span>
+              <hgroup>
+                <h3 class="control-title">Jemuran Otomatis</h3>
+                <p class="control-subtitle">Motor Stepper 28BYJ-48</p>
+              </hgroup>
             </div>
-            <div class="status-indicator active" id="stepper-status">
-              <div class="status-dot active"></div>
+            <p class="status-indicator active" id="stepper-status">
+              <span class="status-dot active"></span>
               Jemuran Di Luar
-            </div>
+            </p>
             <div class="control-btns">
               <button class="btn btn-primary" onclick="controlDevice('stepper','buka')">
                 <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
@@ -408,24 +410,24 @@
                 Tutup
               </button>
             </div>
-            <div style="margin-top:12px;font-size:12px;color:var(--text-muted)">
+            <p style="margin-top:12px;font-size:12px;color:var(--text-muted)">
               💡 Auto-tutup jika hujan terdeteksi
-            </div>
-          </div>
+            </p>
+          </article>
 
           <!-- Kontrol Pintu -->
-          <div class="control-card">
+          <article class="control-card">
             <div class="control-header">
-              <div class="control-icon" style="background:rgba(239,68,68,0.1);font-size:24px;">🚪</div>
-              <div>
-                <div class="control-title">Kontrol Pintu</div>
-                <div class="control-subtitle">Servo Motor SG90</div>
-              </div>
+              <span class="control-icon" style="background:rgba(239,68,68,0.1);font-size:24px;">🚪</span>
+              <hgroup>
+                <h3 class="control-title">Kontrol Pintu</h3>
+                <p class="control-subtitle">Servo Motor SG90</p>
+              </hgroup>
             </div>
-            <div class="status-indicator locked" id="servo-status">
-              <div class="status-dot locked"></div>
+            <p class="status-indicator locked" id="servo-status">
+              <span class="status-dot locked"></span>
               Pintu Terkunci
-            </div>
+            </p>
             <div class="control-btns">
               <button class="btn btn-success" onclick="controlDevice('servo','unlock')">
                 🔓 Buka
@@ -434,97 +436,99 @@
                 🔒 Kunci
               </button>
             </div>
-            <div style="margin-top:12px;font-size:12px;color:var(--text-muted)">
+            <p style="margin-top:12px;font-size:12px;color:var(--text-muted)">
               🔑 Auto-buka dengan RFID terdaftar
-            </div>
-          </div>
+            </p>
+          </article>
 
           <!-- Relay / Lampu -->
-          <div class="control-card">
+          <article class="control-card">
             <div class="control-header">
-              <div class="control-icon" style="background:rgba(245,158,11,0.1);font-size:24px;">💡</div>
-              <div>
-                <div class="control-title">Kontrol Relay</div>
-                <div class="control-subtitle">4-Channel Relay Module</div>
-              </div>
+              <span class="control-icon" style="background:rgba(245,158,11,0.1);font-size:24px;">💡</span>
+              <hgroup>
+                <h3 class="control-title">Kontrol Relay</h3>
+                <p class="control-subtitle">4-Channel Relay Module</p>
+              </hgroup>
             </div>
-            <div class="relay-row">
-              <div>
-                <div class="relay-label">💡 Lampu Ruang Tamu</div>
-                <div class="relay-sub">Relay 1 — 220V</div>
-              </div>
-              <label class="toggle-switch">
-                <input type="checkbox" checked onchange="toggleRelay(1, this.checked)"/>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-            <div class="relay-row">
-              <div>
-                <div class="relay-label">💡 Lampu Kamar</div>
-                <div class="relay-sub">Relay 2 — 220V</div>
-              </div>
-              <label class="toggle-switch">
-                <input type="checkbox" onchange="toggleRelay(2, this.checked)"/>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-            <div class="relay-row">
-              <div>
-                <div class="relay-label">🔌 Stop Kontak 1</div>
-                <div class="relay-sub">Relay 3 — 220V</div>
-              </div>
-              <label class="toggle-switch">
-                <input type="checkbox" checked onchange="toggleRelay(3, this.checked)"/>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-            <div class="relay-row">
-              <div>
-                <div class="relay-label">🔌 Stop Kontak 2</div>
-                <div class="relay-sub">Relay 4 — 220V</div>
-              </div>
-              <label class="toggle-switch">
-                <input type="checkbox" onchange="toggleRelay(4, this.checked)"/>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-          </div>
+            <ul style="list-style:none;padding:0;margin:0">
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">💡 Lampu Ruang Tamu</strong>
+                  <p class="relay-sub">Relay 1 — 220V</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked onchange="toggleRelay(1, this.checked)"/>
+                  <span class="toggle-slider"></span>
+                </label>
+              </li>
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">💡 Lampu Kamar</strong>
+                  <p class="relay-sub">Relay 2 — 220V</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" onchange="toggleRelay(2, this.checked)"/>
+                  <span class="toggle-slider"></span>
+                </label>
+              </li>
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">🔌 Stop Kontak 1</strong>
+                  <p class="relay-sub">Relay 3 — 220V</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" checked onchange="toggleRelay(3, this.checked)"/>
+                  <span class="toggle-slider"></span>
+                </label>
+              </li>
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">🔌 Stop Kontak 2</strong>
+                  <p class="relay-sub">Relay 4 — 220V</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" onchange="toggleRelay(4, this.checked)"/>
+                  <span class="toggle-slider"></span>
+                </label>
+              </li>
+            </ul>
+          </article>
 
-        </div>
+        </section>
 
         <!-- Auto control info -->
-        <div class="history-card" style="margin-top:0">
+        <section class="history-card" style="margin-top:0">
           <div class="history-header">
-            <div class="history-title">⚙️ Aturan Otomasi Aktif</div>
+            <h3 class="history-title">⚙️ Aturan Otomasi Aktif</h3>
           </div>
-          <div style="padding:16px 24px;display:flex;flex-direction:column;gap:10px">
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--success-bg);border-radius:10px;border:1px solid rgba(34,197,94,0.2)">
-              <div style="font-size:13.5px;color:#065F46">🌧️ Jika hujan terdeteksi → Jemuran otomatis masuk</div>
+          <ul style="padding:16px 24px;display:flex;flex-direction:column;gap:10px;list-style:none;margin:0">
+            <li style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--success-bg);border-radius:10px;border:1px solid rgba(34,197,94,0.2)">
+              <span style="font-size:13.5px;color:#065F46">🌧️ Jika hujan terdeteksi → Jemuran otomatis masuk</span>
               <span class="table-badge success">Aktif</span>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--success-bg);border-radius:10px;border:1px solid rgba(34,197,94,0.2)">
-              <div style="font-size:13.5px;color:#065F46">🌑 Jika gelap (LDR &lt; 30%) → Lampu otomatis ON</div>
+            </li>
+            <li style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--success-bg);border-radius:10px;border:1px solid rgba(34,197,94,0.2)">
+              <span style="font-size:13.5px;color:#065F46">🌑 Jika gelap (LDR &lt; 30%) → Lampu otomatis ON</span>
               <span class="table-badge success">Aktif</span>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--danger-bg);border-radius:10px;border:1px solid rgba(239,68,68,0.2)">
-              <div style="font-size:13.5px;color:#B91C1C">💨 Jika gas tinggi (&gt; 400ppm) → Alarm aktif & kirim notifikasi</div>
+            </li>
+            <li style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--danger-bg);border-radius:10px;border:1px solid rgba(239,68,68,0.2)">
+              <span style="font-size:13.5px;color:#B91C1C">💨 Jika gas tinggi (&gt; 400ppm) → Alarm aktif & kirim notifikasi</span>
               <span class="table-badge danger">Siaga</span>
-            </div>
-          </div>
-        </div>
-      </div><!-- /page-control -->
+            </li>
+          </ul>
+        </section>
+      </section><!-- /page-control -->
 
 
       <!-- ======================== PAGE: HISTORY ======================== -->
-      <div id="page-history" class="tab-panel">
-        <div class="page-header">
-          <div class="page-title">Riwayat Aktivitas</div>
-          <div class="page-subtitle">Log semua aktivitas sensor dan aktuator</div>
-        </div>
+      <section id="page-history" class="tab-panel">
+        <header class="page-header">
+          <h2 class="page-title">Riwayat Aktivitas</h2>
+          <p class="page-subtitle">Log semua aktivitas sensor dan aktuator</p>
+        </header>
 
-        <div class="history-card">
+        <section class="history-card">
           <div class="history-header">
-            <div class="history-title">📋 Log Aktivitas</div>
+            <h3 class="history-title">📋 Log Aktivitas</h3>
             <div class="history-filters">
               <input type="text" class="filter-input" placeholder="🔍 Cari aktivitas..." oninput="filterTable(this.value)" style="width:200px"/>
               <input type="date" class="filter-input" value="2025-01-27"/>
@@ -557,36 +561,39 @@
             </table>
           </div>
 
-          <div class="table-footer">
+          <footer class="table-footer">
             <span>Menampilkan 10 dari 48 data</span>
-            <div class="pagination">
+            <nav class="pagination" aria-label="Pagination">
               <button class="page-btn">‹</button>
               <button class="page-btn active">1</button>
               <button class="page-btn">2</button>
               <button class="page-btn">3</button>
               <button class="page-btn">5</button>
               <button class="page-btn">›</button>
-            </div>
-          </div>
-        </div>
-      </div><!-- /page-history -->
+            </nav>
+          </footer>
+        </section>
+      </section><!-- /page-history -->
 
 
       <!-- ======================== PAGE: SETTINGS ======================== -->
-      <div id="page-settings" class="tab-panel">
-        <div class="page-header">
-          <div class="page-title">Pengaturan</div>
-          <div class="page-subtitle">Konfigurasi sistem dan preferensi</div>
-        </div>
+      <section id="page-settings" class="tab-panel">
+        <header class="page-header">
+          <h2 class="page-title">Pengaturan</h2>
+          <p class="page-subtitle">Konfigurasi sistem dan preferensi</p>
+        </header>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <section style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
 
-          <div class="control-card">
+          <article class="control-card">
             <div class="control-header">
-              <div class="control-icon" style="background:rgba(79,70,229,0.1)">⚙️</div>
-              <div><div class="control-title">Konfigurasi Firebase</div><div class="control-subtitle">Koneksi database realtime</div></div>
+              <span class="control-icon" style="background:rgba(79,70,229,0.1)">⚙️</span>
+              <hgroup>
+                <h3 class="control-title">Konfigurasi Firebase</h3>
+                <p class="control-subtitle">Koneksi database realtime</p>
+              </hgroup>
             </div>
-            <div style="display:flex;flex-direction:column;gap:12px">
+            <form style="display:flex;flex-direction:column;gap:12px" onsubmit="event.preventDefault(); showToast('Konfigurasi disimpan');">
               <div class="form-group" style="margin-bottom:0">
                 <label class="form-label" style="color:var(--text-muted);font-size:11.5px">Project ID</label>
                 <input class="filter-input" value="smarthome-esp32-demo" style="width:100%;margin-top:4px"/>
@@ -595,39 +602,57 @@
                 <label class="form-label" style="color:var(--text-muted);font-size:11.5px">Database URL</label>
                 <input class="filter-input" value="https://smarthome-esp32-demo-default-rtdb.firebaseio.com" style="width:100%;margin-top:4px"/>
               </div>
-              <button class="btn btn-primary">Simpan Konfigurasi</button>
-            </div>
-          </div>
+              <button type="submit" class="btn btn-primary">Simpan Konfigurasi</button>
+            </form>
+          </article>
 
-          <div class="control-card">
+          <article class="control-card">
             <div class="control-header">
-              <div class="control-icon" style="background:rgba(245,158,11,0.1)">🔔</div>
-              <div><div class="control-title">Notifikasi</div><div class="control-subtitle">Atur batas alert sensor</div></div>
+              <span class="control-icon" style="background:rgba(245,158,11,0.1)">🔔</span>
+              <hgroup>
+                <h3 class="control-title">Notifikasi</h3>
+                <p class="control-subtitle">Atur batas alert sensor</p>
+              </hgroup>
             </div>
-            <div style="display:flex;flex-direction:column;gap:12px">
-              <div class="relay-row">
-                <div><div class="relay-label">Alert Gas Bocor</div><div class="relay-sub">Batas atas: 400 ppm</div></div>
+            <ul style="display:flex;flex-direction:column;gap:12px;list-style:none;padding:0;margin:0">
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">Alert Gas Bocor</strong>
+                  <p class="relay-sub">Batas atas: 400 ppm</p>
+                </div>
                 <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
-              </div>
-              <div class="relay-row">
-                <div><div class="relay-label">Alert Hujan</div><div class="relay-sub">Jika intensitas &gt; 20%</div></div>
+              </li>
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">Alert Hujan</strong>
+                  <p class="relay-sub">Jika intensitas &gt; 20%</p>
+                </div>
                 <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
-              </div>
-              <div class="relay-row">
-                <div><div class="relay-label">Alert Akses RFID</div><div class="relay-sub">Setiap tap kartu</div></div>
+              </li>
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">Alert Akses RFID</strong>
+                  <p class="relay-sub">Setiap tap kartu</p>
+                </div>
                 <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
-              </div>
-              <div class="relay-row" style="border:none">
-                <div><div class="relay-label">Dark Mode</div><div class="relay-sub">Tampilan gelap</div></div>
+              </li>
+              <li class="relay-row" style="border:none">
+                <div>
+                  <strong class="relay-label">Dark Mode</strong>
+                  <p class="relay-sub">Tampilan gelap</p>
+                </div>
                 <label class="toggle-switch"><input type="checkbox" id="dark-toggle" onchange="toggleThemeFromSettings(this.checked)"/><span class="toggle-slider"></span></label>
-              </div>
-            </div>
-          </div>
+              </li>
+            </ul>
+          </article>
 
-          <div class="control-card" style="grid-column:span 2">
+          <article class="control-card" style="grid-column:span 2">
             <div class="control-header">
-              <div class="control-icon" style="background:rgba(34,197,94,0.1)">👤</div>
-              <div><div class="control-title">Akun Pengguna</div><div class="control-subtitle">Kelola akses pengguna</div></div>
+              <span class="control-icon" style="background:rgba(34,197,94,0.1)">👤</span>
+              <hgroup>
+                <h3 class="control-title">Akun Pengguna</h3>
+                <p class="control-subtitle">Kelola akses pengguna</p>
+              </hgroup>
             </div>
             <table>
               <thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Status</th></tr></thead>
@@ -636,15 +661,15 @@
                 <tr><td>Penghuni</td><td class="td-muted">user@smarthome.id</td><td><span class="table-badge info">User</span></td><td><span class="table-badge success">Aktif</span></td></tr>
               </tbody>
             </table>
-          </div>
+          </article>
 
-        </div>
-      </div><!-- /page-settings -->
+        </section>
+      </section><!-- /page-settings -->
 
     </main>
   </div><!-- /main-content -->
 </div><!-- /app-layout -->
 
-<script src="app.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

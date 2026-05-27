@@ -218,11 +218,11 @@ function controlDevice(device, action) {
   if (device === 'stepper') {
     if (action === 'buka') {
       statusEl.className = 'status-indicator active';
-      statusEl.innerHTML = '<div class="status-dot active"></div> Jemuran Di Luar';
+      statusEl.innerHTML = '<span class="status-dot active"></span> Jemuran Di Luar';
       addHistoryEntry('Jemuran', 'Buka jemuran', 'Manual', 'success');
     } else {
       statusEl.className = 'status-indicator inactive';
-      statusEl.innerHTML = '<div class="status-dot inactive"></div> Jemuran Masuk';
+      statusEl.innerHTML = '<span class="status-dot inactive"></span> Jemuran Masuk';
       addHistoryEntry('Jemuran', 'Tutup jemuran', 'Manual', 'warning');
     }
   }
@@ -230,19 +230,19 @@ function controlDevice(device, action) {
   if (device === 'servo') {
     if (action === 'unlock') {
       statusEl.className = 'status-indicator unlocked';
-      statusEl.innerHTML = '<div class="status-dot unlocked"></div> Pintu Terbuka';
+      statusEl.innerHTML = '<span class="status-dot unlocked"></span> Pintu Terbuka';
       addHistoryEntry('Pintu', 'Buka pintu', 'Manual', 'success');
       // Auto-lock after 5 seconds
       setTimeout(() => {
         if (statusEl) {
           statusEl.className = 'status-indicator locked';
-          statusEl.innerHTML = '<div class="status-dot locked"></div> Pintu Terkunci';
+          statusEl.innerHTML = '<span class="status-dot locked"></span> Pintu Terkunci';
           addHistoryEntry('Pintu', 'Auto-kunci pintu', 'Otomatis', 'info');
         }
       }, 5000);
     } else {
       statusEl.className = 'status-indicator locked';
-      statusEl.innerHTML = '<div class="status-dot locked"></div> Pintu Terkunci';
+      statusEl.innerHTML = '<span class="status-dot locked"></span> Pintu Terkunci';
       addHistoryEntry('Pintu', 'Kunci pintu', 'Manual', 'info');
     }
   }

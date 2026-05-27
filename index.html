@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SmartHome — Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body class="login-page">
 
@@ -20,47 +20,47 @@
   <div class="bg-circle circle-2"></div>
   <div class="bg-circle circle-3"></div>
 
-  <div class="login-wrapper">
-    <div class="login-card">
+  <main class="login-wrapper">
+    <section class="login-card">
 
       <!-- Logo -->
       <div class="login-logo">
-        <div class="logo-icon">
+        <span class="logo-icon">
           <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M20 4L4 16v20h10V24h12v12h10V16L20 4z" fill="white" opacity="0.95"/>
             <circle cx="20" cy="17" r="3.5" fill="#4F46E5"/>
           </svg>
-        </div>
-        <div class="logo-text">
-          <span class="logo-main">SmartHome</span>
-          <span class="logo-sub">Monitoring & Control System</span>
-        </div>
+        </span>
+        <hgroup class="logo-text">
+          <h1 class="logo-main">SmartHome</h1>
+          <p class="logo-sub">Monitoring & Control System</p>
+        </hgroup>
       </div>
 
       <!-- Form -->
-      <div class="login-form-area">
+      <form class="login-form-area" id="loginForm" onsubmit="event.preventDefault(); handleLogin();">
         <h2 class="login-title">Selamat Datang</h2>
         <p class="login-desc">Masuk ke sistem monitoring rumah pintar Anda</p>
 
         <div class="form-group">
-          <label class="form-label">Email</label>
+          <label class="form-label" for="email">Email</label>
           <div class="input-wrapper">
             <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor">
               <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
               <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
             </svg>
-            <input type="email" id="email" class="form-input" placeholder="admin@smarthome.id"/>
+            <input type="email" id="email" class="form-input" placeholder="admin@smarthome.id" required/>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Password</label>
+          <label class="form-label" for="password">Password</label>
           <div class="input-wrapper">
             <svg class="input-icon" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
             </svg>
-            <input type="password" id="password" class="form-input" placeholder="••••••••"/>
-            <button class="toggle-pass" onclick="togglePassword()">
+            <input type="password" id="password" class="form-input" placeholder="••••••••" required/>
+            <button type="button" class="toggle-pass" onclick="togglePassword()" aria-label="Toggle password visibility">
               <svg id="eye-icon" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
                 <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
@@ -78,60 +78,60 @@
           <a href="#" class="forgot-link">Lupa password?</a>
         </div>
 
-        <button class="btn-login" onclick="handleLogin()">
+        <button type="submit" class="btn-login">
           <span class="btn-text">Masuk Sekarang</span>
           <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
           </svg>
         </button>
 
-        <div id="login-error" class="login-error" style="display:none">
+        <output id="login-error" class="login-error" style="display:none">
           Email atau password salah. Coba lagi.
-        </div>
-      </div>
+        </output>
+      </form>
 
       <!-- Demo credentials hint -->
-      <div class="demo-hint">
+      <p class="demo-hint">
         <span>Demo:</span> admin@smarthome.id / admin123
-      </div>
-    </div>
+      </p>
+    </section>
 
     <!-- Side illustration -->
-    <div class="login-illustration">
-      <div class="ill-card">
+    <aside class="login-illustration">
+      <article class="ill-card">
         <div class="ill-header">
-          <div class="ill-dot red"></div>
-          <div class="ill-dot yellow"></div>
-          <div class="ill-dot green"></div>
+          <span class="ill-dot red"></span>
+          <span class="ill-dot yellow"></span>
+          <span class="ill-dot green"></span>
         </div>
-        <div class="ill-stats">
-          <div class="ill-stat">
-            <div class="ill-stat-label">Sensor Aktif</div>
-            <div class="ill-stat-val">5</div>
-          </div>
-          <div class="ill-stat">
-            <div class="ill-stat-label">Perangkat</div>
-            <div class="ill-stat-val">3</div>
-          </div>
-          <div class="ill-stat">
-            <div class="ill-stat-label">Keamanan</div>
-            <div class="ill-stat-val good">Aman</div>
-          </div>
-        </div>
-        <div class="ill-sensors">
-          <div class="ill-sensor-row"><span class="ill-sensor-name">🌬️ Gas MQ-135</span><span class="ill-sensor-badge good">Normal</span></div>
-          <div class="ill-sensor-row"><span class="ill-sensor-name">💡 Cahaya LDR</span><span class="ill-sensor-badge warn">Redup</span></div>
-          <div class="ill-sensor-row"><span class="ill-sensor-name">🌧️ Sensor Hujan</span><span class="ill-sensor-badge good">Cerah</span></div>
-          <div class="ill-sensor-row"><span class="ill-sensor-name">📡 Ultrasonik</span><span class="ill-sensor-badge good">Clear</span></div>
-          <div class="ill-sensor-row"><span class="ill-sensor-name">🔑 RFID RC522</span><span class="ill-sensor-badge good">Aktif</span></div>
-        </div>
-      </div>
-      <div class="ill-tagline">
+        <ul class="ill-stats" style="list-style: none;">
+          <li class="ill-stat">
+            <span class="ill-stat-label">Sensor Aktif</span>
+            <strong class="ill-stat-val">5</strong>
+          </li>
+          <li class="ill-stat">
+            <span class="ill-stat-label">Perangkat</span>
+            <strong class="ill-stat-val">3</strong>
+          </li>
+          <li class="ill-stat">
+            <span class="ill-stat-label">Keamanan</span>
+            <strong class="ill-stat-val good">Aman</strong>
+          </li>
+        </ul>
+        <ul class="ill-sensors" style="list-style: none;">
+          <li class="ill-sensor-row"><span class="ill-sensor-name">🌬️ Gas MQ-135</span><span class="ill-sensor-badge good">Normal</span></li>
+          <li class="ill-sensor-row"><span class="ill-sensor-name">💡 Cahaya LDR</span><span class="ill-sensor-badge warn">Redup</span></li>
+          <li class="ill-sensor-row"><span class="ill-sensor-name">🌧️ Sensor Hujan</span><span class="ill-sensor-badge good">Cerah</span></li>
+          <li class="ill-sensor-row"><span class="ill-sensor-name">📡 Ultrasonik</span><span class="ill-sensor-badge good">Clear</span></li>
+          <li class="ill-sensor-row"><span class="ill-sensor-name">🔑 RFID RC522</span><span class="ill-sensor-badge good">Aktif</span></li>
+        </ul>
+      </article>
+      <section class="ill-tagline">
         <h2>Kontrol Rumah Anda<br/>Dari Mana Saja</h2>
         <p>Monitoring & otomasi rumah pintar berbasis IoT dengan ESP32 & Firebase</p>
-      </div>
-    </div>
-  </div>
+      </section>
+    </aside>
+  </main>
 
   <script>
     function togglePassword() {
@@ -161,10 +161,6 @@
         }
       }, 1200);
     }
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Enter') handleLogin();
-    });
   </script>
 </body>
 </html>
