@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartHome — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 4L4 16v20h10V24h12v12h10V16L20 4z" fill="white" opacity="0.95"/>
+          <circle cx="20" cy="17" r="3.5" fill="#4F46E5"/>
+        </svg>
+      </span>
+      <hgroup class="logo-text">
+        <h1 class="logo-main">SmartHome</h1>
+        <p class="logo-sub">v2.0 — ESP32</p>
+      </hgroup>
+    </div>
+
+    <nav class="sidebar-nav">
+      <h3 class="nav-section-label">Menu Utama</h3>
+
+      <a class="nav-item active" onclick="setPage('dashboard')" href="javascript:void(0)">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/></svg>
+        Dashboard
+      </a>
+
+      <a class="nav-item" onclick="setPage('monitoring')" href="javascript:void(0)">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z" clip-rule="evenodd"/></svg>
+        Monitoring Sensor
+      </a>
+
+      <a class="nav-item" onclick="setPage('control')" href="javascript:void(0)">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M13 7H7v6h6V7z"/><path fill-rule="evenodd" d="M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 110-2h1V9H2a1 1 0 010-2h1V5a2 2 0 012-2h2V2zM5 5h10v10H5V5z" clip-rule="evenodd"/></svg>
+        Kontrol Perangkat
+      </a>
+
+      <a class="nav-item" onclick="setPage('history')" href="javascript:void(0)">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+        Riwayat Aktivitas
+      </a>
+
+      <h3 class="nav-section-label" style="margin-top:8px;">Sistem</h3>
+
+      <a class="nav-item" onclick="setPage('settings')" href="javascript:void(0)">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+        Pengaturan
+      </a>
+    </nav>
+
+    <footer class="sidebar-footer">
+      <button class="logout-btn" onclick="logout()">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/></svg>
+        Keluar
+      </button>
+    </footer>
+  </aside>
+
+  <!-- Overlay for mobile -->
+  <div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content" id="mainContent">
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+      <button class="navbar-toggle" onclick="toggleSidebar()">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+      </button>
+
+      <h2 class="navbar-brand">Smart<span>Home</span></h2>
+
+      <span class="esp-status">
+        <span class="esp-dot"></span>
+        <span>Firebase belum terhubung</span>
+      </span>
+
+      <button class="btn-notif" onclick="toggleNotifPanel()">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg>
+        <span class="notif-badge">0</span>
+      </button>
+
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <svg id="theme-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+        </svg>
+      </button>
+
+      <time class="navbar-clock" id="navbar-clock">00:00:00</time>
+
+      <span class="user-avatar" title="Administrator">A</span>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main class="page-content">
+
+      <!-- ======================== PAGE: DASHBOARD ======================== -->
+      <section id="page-dashboard" class="tab-panel active fade-in">
+
+        <!-- Notification Alert -->
+        <aside class="alert-banner warning" id="alert-gas" style="display:none">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+          <span>⚠️ Peringatan: Kadar gas terdeteksi tinggi! Segera cek kondisi rumah.</span>
+          <button class="alert-banner-close" onclick="this.parentElement.style.display='none'">✕</button>
+        </aside>
+
+        <!-- Welcome Hero -->
+        <section class="welcome-hero">
+          <hgroup class="welcome-text">
+            <p class="welcome-greeting">Selamat Datang Kembali,</p>
+            <h2 class="welcome-name">Administrator 👋</h2>
+        <p class="welcome-status">
+              <span class="welcome-status-dot"></span>
+              Menunggu data realtime dari Firebase
+            </p>
+          </hgroup>
+          <span class="welcome-house">🏠</span>
+        </section>
+
+        <!-- Stats Grid -->
+        <section class="stats-grid">
+          <article class="stat-card primary card-animate" style="animation-delay:0.05s">
+            <span class="stat-icon primary">📡</span>
+            <div class="stat-info">
+              <h3 class="stat-label">Total Sensor</h3>
+              <p class="stat-val">-</p>
+              <p class="stat-sub">Belum ada data</p>
+            </div>
+          </article>
+          <article class="stat-card success card-animate" style="animation-delay:0.1s">
+            <span class="stat-icon success">⚡</span>
+            <div class="stat-info">
+              <h3 class="stat-label">Perangkat Aktif</h3>
+              <p class="stat-val">-</p>
+              <p class="stat-sub">Belum ada data</p>
+            </div>
+          </article>
+          <article class="stat-card warning card-animate" style="animation-delay:0.15s">
+            <span class="stat-icon warning">🔒</span>
+            <div class="stat-info">
+              <h3 class="stat-label">Status Keamanan</h3>
+              <p class="stat-val" style="font-size:18px;margin-top:2px">-</p>
+              <p class="stat-sub">Belum ada data</p>
+            </div>
+          </article>
+          <article class="stat-card info card-animate" style="animation-delay:0.2s">
+            <span class="stat-icon info">🌤️</span>
+            <div class="stat-info">
+              <h3 class="stat-label">Status Cuaca</h3>
+              <p class="stat-val" style="font-size:18px;margin-top:2px">-</p>
+              <p class="stat-sub">Belum ada data</p>
+            </div>
+          </article>
+        </section>
+
+        <!-- Sensor summary mini -->
+        <section class="sensors-grid">
+          <!-- Gas -->
+          <article class="sensor-card sensor-gas card-animate" style="animation-delay:0.1s">
+            <div class="sensor-card-header">
+              <span class="sensor-icon-wrap">💨</span>
+              <span class="sensor-badge badge-info" id="gas-badge">Belum ada data</span>
+            </div>
+            <h3 class="sensor-name">Gas MQ-135</h3>
+            <p><span class="sensor-value" id="gas-val">-</span><span class="sensor-unit">ppm</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="gas-bar" style="width:0%"></div></div>
+          </article>
+
+          <!-- Light -->
+          <article class="sensor-card sensor-light card-animate" style="animation-delay:0.15s">
+            <div class="sensor-card-header">
+              <span class="sensor-icon-wrap">💡</span>
+              <span class="sensor-badge badge-info" id="light-badge">Belum ada data</span>
+            </div>
+            <h3 class="sensor-name">Cahaya LDR</h3>
+            <p><span class="sensor-value" id="light-val">-</span><span class="sensor-unit">%</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="light-bar" style="width:0%"></div></div>
+          </article>
+
+          <!-- Rain -->
+          <article class="sensor-card sensor-rain card-animate" style="animation-delay:0.2s">
+            <div class="sensor-card-header">
+              <span class="sensor-icon-wrap">🌧️</span>
+              <span class="sensor-badge badge-info" id="rain-badge">Belum ada data</span>
+            </div>
+            <h3 class="sensor-name">Sensor Hujan</h3>
+            <p><span class="sensor-value" id="rain-val">-</span><span class="sensor-unit">%</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="rain-bar" style="width:0%"></div></div>
+          </article>
+
+          <!-- Ultrasonic -->
+          <article class="sensor-card sensor-ultrasonic card-animate" style="animation-delay:0.25s">
+            <div class="sensor-card-header">
+              <span class="sensor-icon-wrap">📡</span>
+              <span class="sensor-badge badge-info" id="ultra-badge">Belum ada data</span>
+            </div>
+            <h3 class="sensor-name">Ultrasonik HC-SR04</h3>
+            <p><span class="sensor-value" id="ultra-val">-</span><span class="sensor-unit">cm</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="ultra-bar" style="width:0%"></div></div>
+          </article>
+
+          <!-- RFID -->
+          <article class="sensor-card sensor-rfid card-animate" style="animation-delay:0.3s">
+            <div class="sensor-card-header">
+              <span class="sensor-icon-wrap">🔑</span>
+              <span class="sensor-badge badge-info" id="rfid-badge">Belum ada data</span>
+            </div>
+            <h3 class="sensor-name">RFID RC522</h3>
+            <p><span class="sensor-value" style="font-size:20px;letter-spacing:1px">-</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:0%"></div></div>
+          </article>
+
+          <!-- System Status -->
+          <article class="sensor-card card-animate" style="animation-delay:0.35s; background: linear-gradient(135deg, var(--primary), #3730A3);">
+            <div class="sensor-card-header">
+              <span class="sensor-icon-wrap" style="background:rgba(255,255,255,0.15);">🏠</span>
+              <span class="sensor-badge" style="background:rgba(255,255,255,0.15);color:white">Belum terhubung</span>
+            </div>
+            <h3 class="sensor-name" style="color:rgba(255,255,255,0.8)">Status Sistem</h3>
+            <p style="font-size:24px;font-weight:700;color:white">ESP32</p>
+            <p style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:6px">Firebase belum dikonfigurasi</p>
+            <div class="sensor-progress" style="background:rgba(255,255,255,0.15)" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+              <div class="sensor-progress-fill" style="width:0%;background:rgba(255,255,255,0.6)"></div>
+            </div>
+          </article>
+        </section>
+
+        <!-- Notification panel -->
+        <aside class="notif-panel" id="notif-panel" style="display:none">
+          <div class="notif-panel-header">
+            Notifikasi Realtime
+            <button onclick="document.getElementById('notif-panel').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:18px;">✕</button>
+          </div>
+          <ul class="notif-list" style="list-style:none;padding:0;margin:0">
+            <li class="notif-item">
+              <span class="notif-dot" style="background:var(--text-muted)"></span>
+              <p class="notif-text">Belum ada notifikasi.</p>
+              <time class="notif-time">-</time>
+            </li>
+          </ul>
+        </aside>
+
+      </section><!-- /page-dashboard -->
+
+
+      <!-- ======================== PAGE: MONITORING ======================== -->
+      <section id="page-monitoring" class="tab-panel">
+        <header class="page-header">
+          <h2 class="page-title">Monitoring Sensor</h2>
+          <p class="page-subtitle">Data realtime dari semua sensor yang terhubung ke ESP32</p>
+        </header>
+
+        <section class="sensors-grid">
+          <!-- Gas MQ-135 detail -->
+          <article class="sensor-card sensor-gas">
+            <div class="sensor-card-header">
+              <span class="sensor-icon-wrap" style="font-size:28px;">💨</span>
+              <span class="sensor-badge badge-info">Belum ada data</span>
+            </div>
+            <h3 class="sensor-name">Gas MQ-135</h3>
+            <p><span class="sensor-value" id="m-gas-val">-</span><span class="sensor-unit">ppm</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:0%"></div></div>
+            <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+              <span style="font-size:11.5px;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--text-muted)">Min: -</span>
+              <span style="font-size:11.5px;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--text-muted)">Max: -</span>
+              <span style="font-size:11.5px;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--text-muted)">Avg: -</span>
+            </div>
+          </article>
+
+          <!-- LDR -->
+          <article class="sensor-card sensor-light">
+            <div class="sensor-card-header">
+              <span class="sensor-icon-wrap" style="font-size:28px;">☀️</span>
+              <span class="sensor-badge badge-info">Belum ada data</span>
+            </div>
+            <h3 class="sensor-name">Cahaya LDR</h3>
+            <p><span class="sensor-value" id="m-light-val">-</span><span class="sensor-unit">%</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:0%"></div></div>
+            <p style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">Otomasi belum aktif</p>
+          </article>
+
+          <!-- Rain -->
+          <article class="sensor-card sensor-rain">
+            <div class="sensor-card-header">
+              <span class="sensor-icon-wrap" style="font-size:28px;">🌦️</span>
+              <span class="sensor-badge badge-info">Belum ada data</span>
+            </div>
+            <h3 class="sensor-name">Sensor Hujan</h3>
+            <p><span class="sensor-value" id="m-rain-val">-</span><span class="sensor-unit">%</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:0%"></div></div>
+            <p style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">Otomasi belum aktif</p>
+          </article>
+
+          <!-- Ultrasonic -->
+          <article class="sensor-card sensor-ultrasonic">
+            <div class="sensor-card-header">
+              <span class="sensor-icon-wrap" style="font-size:28px;">📻</span>
+              <span class="sensor-badge badge-info">Belum ada data</span>
+            </div>
+            <h3 class="sensor-name">Ultrasonik HC-SR04</h3>
+            <p><span class="sensor-value" id="m-ultra-val">-</span><span class="sensor-unit">cm</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:0%"></div></div>
+            <p style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">Belum ada pembacaan jarak</p>
+          </article>
+
+          <!-- RFID -->
+          <article class="sensor-card sensor-rfid" style="grid-column:span 2">
+            <div class="sensor-card-header">
+              <span class="sensor-icon-wrap" style="font-size:28px;">🪪</span>
+              <span class="sensor-badge badge-info">Belum ada data</span>
+            </div>
+            <h3 class="sensor-name">RFID RC522</h3>
+            <dl class="rfid-details" style="display:flex;gap:24px;align-items:flex-end;flex-wrap:wrap;margin:0">
+              <div>
+                <dt style="font-size:12px;color:var(--text-muted);margin-bottom:4px">UID Terakhir</dt>
+                <dd style="font-size:24px;font-weight:700;font-family:monospace;color:var(--text);letter-spacing:2px;margin:0">-</dd>
+              </div>
+              <div>
+                <dt style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Status Akses</dt>
+                <dd style="margin:0"><span class="sensor-badge badge-info" style="font-size:13px;padding:5px 14px">Belum ada data</span></dd>
+              </div>
+              <div>
+                <dt style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Waktu Tap</dt>
+                <dd style="font-size:14px;font-weight:600;color:var(--text);margin:0">-</dd>
+              </div>
+            </dl>
+            <section style="margin-top:20px">
+              <h4 style="font-size:12.5px;font-weight:600;color:var(--text-muted);margin-bottom:10px">Log Akses RFID</h4>
+              <ul style="display:flex;flex-direction:column;gap:8px;list-style:none;padding:0;margin:0">
+                <li style="display:flex;justify-content:center;align-items:center;font-size:12.5px;padding:12px;background:var(--bg);border-radius:8px;color:var(--text-muted)">
+                  Belum ada log RFID.
+                </li>
+              </ul>
+            </section>
+          </article>
+        </section>
+      </section><!-- /page-monitoring -->
+
+
+      <!-- ======================== PAGE: CONTROL ======================== -->
+      <section id="page-control" class="tab-panel">
+        <header class="page-header">
+          <h2 class="page-title">Kontrol Perangkat</h2>
+          <p class="page-subtitle">Kendalikan semua aktuator dari sini — perubahan dikirim ke ESP32 via Firebase</p>
+        </header>
+
+        <section class="control-grid">
+
+          <!-- Jemuran Otomatis -->
+          <article class="control-card">
+            <div class="control-header">
+              <span class="control-icon" style="background:rgba(59,130,246,0.1);font-size:24px;">👕</span>
+              <hgroup>
+                <h3 class="control-title">Jemuran Otomatis</h3>
+                <p class="control-subtitle">Motor Stepper 28BYJ-48</p>
+              </hgroup>
+            </div>
+          <p class="status-indicator inactive" id="stepper-status">
+              <span class="status-dot inactive"></span>
+              Belum ada status
+            </p>
+            <div class="control-btns">
+              <button class="btn btn-primary" onclick="controlDevice('stepper','buka')">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+                Buka
+              </button>
+              <button class="btn btn-outline" onclick="controlDevice('stepper','tutup')">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd"/></svg>
+                Tutup
+              </button>
+            </div>
+            <p style="margin-top:12px;font-size:12px;color:var(--text-muted)">
+              💡 Auto-tutup jika hujan terdeteksi
+            </p>
+          </article>
+
+          <!-- Kontrol Pintu -->
+          <article class="control-card">
+            <div class="control-header">
+              <span class="control-icon" style="background:rgba(239,68,68,0.1);font-size:24px;">🚪</span>
+              <hgroup>
+                <h3 class="control-title">Kontrol Pintu</h3>
+                <p class="control-subtitle">Servo Motor SG90</p>
+              </hgroup>
+            </div>
+          <p class="status-indicator inactive" id="servo-status">
+              <span class="status-dot inactive"></span>
+              Belum ada status
+            </p>
+            <div class="control-btns">
+              <button class="btn btn-success" onclick="controlDevice('servo','unlock')">
+                🔓 Buka
+              </button>
+              <button class="btn btn-danger" onclick="controlDevice('servo','lock')">
+                🔒 Kunci
+              </button>
+            </div>
+            <p style="margin-top:12px;font-size:12px;color:var(--text-muted)">
+              🔑 Auto-buka dengan RFID terdaftar
+            </p>
+          </article>
+
+          <!-- Relay / Lampu -->
+          <article class="control-card">
+            <div class="control-header">
+              <span class="control-icon" style="background:rgba(245,158,11,0.1);font-size:24px;">💡</span>
+              <hgroup>
+                <h3 class="control-title">Kontrol Relay</h3>
+                <p class="control-subtitle">4-Channel Relay Module</p>
+              </hgroup>
+            </div>
+            <ul style="list-style:none;padding:0;margin:0">
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">💡 Lampu Ruang Tamu</strong>
+                  <p class="relay-sub">Relay 1 — 220V</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" onchange="toggleRelay(1, this)"/>
+                  <span class="toggle-slider"></span>
+                </label>
+              </li>
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">💡 Lampu Kamar</strong>
+                  <p class="relay-sub">Relay 2 — 220V</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" onchange="toggleRelay(2, this)"/>
+                  <span class="toggle-slider"></span>
+                </label>
+              </li>
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">🔌 Stop Kontak 1</strong>
+                  <p class="relay-sub">Relay 3 — 220V</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" onchange="toggleRelay(3, this)"/>
+                  <span class="toggle-slider"></span>
+                </label>
+              </li>
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">🔌 Stop Kontak 2</strong>
+                  <p class="relay-sub">Relay 4 — 220V</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" onchange="toggleRelay(4, this)"/>
+                  <span class="toggle-slider"></span>
+                </label>
+              </li>
+            </ul>
+          </article>
+
+        </section>
+
+        <!-- Auto control info -->
+        <section class="history-card" style="margin-top:0">
+          <div class="history-header">
+            <h3 class="history-title">⚙️ Aturan Otomasi</h3>
+          </div>
+          <ul style="padding:16px 24px;display:flex;flex-direction:column;gap:10px;list-style:none;margin:0">
+            <li style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--success-bg);border-radius:10px;border:1px solid rgba(34,197,94,0.2)">
+              <span style="font-size:13.5px;color:#065F46">🌧️ Jika hujan terdeteksi → Jemuran otomatis masuk</span>
+              <span class="table-badge info">Belum aktif</span>
+            </li>
+            <li style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--success-bg);border-radius:10px;border:1px solid rgba(34,197,94,0.2)">
+              <span style="font-size:13.5px;color:#065F46">🌑 Jika gelap → Lampu otomatis ON</span>
+              <span class="table-badge info">Belum aktif</span>
+            </li>
+            <li style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--danger-bg);border-radius:10px;border:1px solid rgba(239,68,68,0.2)">
+              <span style="font-size:13.5px;color:#B91C1C">💨 Jika gas tinggi → Alarm aktif & kirim notifikasi</span>
+              <span class="table-badge info">Belum aktif</span>
+            </li>
+          </ul>
+        </section>
+      </section><!-- /page-control -->
+
+
+      <!-- ======================== PAGE: HISTORY ======================== -->
+      <section id="page-history" class="tab-panel">
+        <header class="page-header">
+          <h2 class="page-title">Riwayat Aktivitas</h2>
+          <p class="page-subtitle">Log semua aktivitas sensor dan aktuator</p>
+        </header>
+
+        <section class="history-card">
+          <div class="history-header">
+            <h3 class="history-title">📋 Log Aktivitas</h3>
+            <div class="history-filters">
+              <input type="text" class="filter-input" placeholder="🔍 Cari aktivitas..." oninput="filterTable(this.value)" style="width:200px"/>
+              <input type="date" class="filter-input"/>
+              <select class="filter-input">
+                <option>Semua Tipe</option>
+                <option>Sensor</option>
+                <option>RFID</option>
+                <option>Relay</option>
+                <option>Pintu</option>
+                <option>Jemuran</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="history-table-wrap">
+            <table id="activity-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Waktu</th>
+                  <th>Tipe</th>
+                  <th>Aktivitas</th>
+                  <th>Nilai</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="activity-tbody">
+                <!-- Filled by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <footer class="table-footer">
+            <span>Belum ada data aktivitas</span>
+            <nav class="pagination" aria-label="Pagination">
+              <button class="page-btn active">1</button>
+            </nav>
+          </footer>
+        </section>
+      </section><!-- /page-history -->
+
+
+      <!-- ======================== PAGE: SETTINGS ======================== -->
+      <section id="page-settings" class="tab-panel">
+        <header class="page-header">
+          <h2 class="page-title">Pengaturan</h2>
+          <p class="page-subtitle">Konfigurasi sistem dan preferensi</p>
+        </header>
+
+        <section style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+
+          <article class="control-card">
+            <div class="control-header">
+              <span class="control-icon" style="background:rgba(79,70,229,0.1)">⚙️</span>
+              <hgroup>
+                <h3 class="control-title">Konfigurasi Firebase</h3>
+                <p class="control-subtitle">Koneksi database realtime</p>
+              </hgroup>
+            </div>
+            <form style="display:flex;flex-direction:column;gap:12px" onsubmit="event.preventDefault(); showToast('Konfigurasi disimpan');">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label" style="color:var(--text-muted);font-size:11.5px">Project ID</label>
+                <input class="filter-input" placeholder="Masukkan Project ID Firebase" style="width:100%;margin-top:4px"/>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label" style="color:var(--text-muted);font-size:11.5px">Database URL</label>
+                <input class="filter-input" placeholder="Masukkan Database URL Firebase" style="width:100%;margin-top:4px"/>
+              </div>
+              <button type="submit" class="btn btn-primary">Simpan Konfigurasi</button>
+            </form>
+          </article>
+
+          <article class="control-card">
+            <div class="control-header">
+              <span class="control-icon" style="background:rgba(245,158,11,0.1)">🔔</span>
+              <hgroup>
+                <h3 class="control-title">Notifikasi</h3>
+                <p class="control-subtitle">Atur batas alert sensor</p>
+              </hgroup>
+            </div>
+            <ul style="display:flex;flex-direction:column;gap:12px;list-style:none;padding:0;margin:0">
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">Alert Gas Bocor</strong>
+                  <p class="relay-sub">Belum dikonfigurasi</p>
+                </div>
+                <label class="toggle-switch"><input type="checkbox"/><span class="toggle-slider"></span></label>
+              </li>
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">Alert Hujan</strong>
+                  <p class="relay-sub">Belum dikonfigurasi</p>
+                </div>
+                <label class="toggle-switch"><input type="checkbox"/><span class="toggle-slider"></span></label>
+              </li>
+              <li class="relay-row">
+                <div>
+                  <strong class="relay-label">Alert Akses RFID</strong>
+                  <p class="relay-sub">Belum dikonfigurasi</p>
+                </div>
+                <label class="toggle-switch"><input type="checkbox"/><span class="toggle-slider"></span></label>
+              </li>
+              <li class="relay-row" style="border:none">
+                <div>
+                  <strong class="relay-label">Dark Mode</strong>
+                  <p class="relay-sub">Tampilan gelap</p>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" id="dark-toggle" onchange="toggleThemeFromSettings(this.checked)"/><span class="toggle-slider"></span></label>
+              </li>
+            </ul>
+          </article>
+
+          <article class="control-card" style="grid-column:span 2">
+            <div class="control-header">
+              <span class="control-icon" style="background:rgba(34,197,94,0.1)">👤</span>
+              <hgroup>
+                <h3 class="control-title">Akun Pengguna</h3>
+                <p class="control-subtitle">Kelola akses pengguna</p>
+              </hgroup>
+            </div>
+            <table>
+              <thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="td-muted" colspan="4" style="text-align:center;padding:18px">Belum ada data pengguna.</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+        </section>
+      </section><!-- /page-settings -->
+
+    </main>
+  </div><!-- /main-content -->
+</div><!-- /app-layout -->
+
+<script src="js/app.js"></script>
+</body>
+</html>
