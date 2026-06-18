@@ -47,7 +47,6 @@
       <a class="nav-item" onclick="setPage('history')" href="javascript:void(0)">
         <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
         Riwayat Aktivitas
-        <span class="nav-badge">3</span>
       </a>
 
       <h3 class="nav-section-label" style="margin-top:8px;">Sistem</h3>
@@ -82,12 +81,12 @@
 
       <span class="esp-status">
         <span class="esp-dot"></span>
-        <span>ESP32 Online</span>
+        <span>Firebase belum terhubung</span>
       </span>
 
       <button class="btn-notif" onclick="toggleNotifPanel()">
         <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg>
-        <span class="notif-badge">3</span>
+        <span class="notif-badge">0</span>
       </button>
 
       <button class="theme-toggle" onclick="toggleTheme()">
@@ -119,9 +118,9 @@
           <hgroup class="welcome-text">
             <p class="welcome-greeting">Selamat Datang Kembali,</p>
             <h2 class="welcome-name">Administrator 👋</h2>
-            <p class="welcome-status">
+        <p class="welcome-status">
               <span class="welcome-status-dot"></span>
-              Semua sistem berjalan normal — Rumah aman terpantau
+              Menunggu data realtime dari Firebase
             </p>
           </hgroup>
           <span class="welcome-house">🏠</span>
@@ -133,32 +132,32 @@
             <span class="stat-icon primary">📡</span>
             <div class="stat-info">
               <h3 class="stat-label">Total Sensor</h3>
-              <p class="stat-val">5</p>
-              <p class="stat-sub">Aktif semua</p>
+              <p class="stat-val">-</p>
+              <p class="stat-sub">Belum ada data</p>
             </div>
           </article>
           <article class="stat-card success card-animate" style="animation-delay:0.1s">
             <span class="stat-icon success">⚡</span>
             <div class="stat-info">
               <h3 class="stat-label">Perangkat Aktif</h3>
-              <p class="stat-val">3</p>
-              <p class="stat-sub">Relay, Servo, Stepper</p>
+              <p class="stat-val">-</p>
+              <p class="stat-sub">Belum ada data</p>
             </div>
           </article>
           <article class="stat-card warning card-animate" style="animation-delay:0.15s">
             <span class="stat-icon warning">🔒</span>
             <div class="stat-info">
               <h3 class="stat-label">Status Keamanan</h3>
-              <p class="stat-val" style="font-size:18px;margin-top:2px">Aman</p>
-              <p class="stat-sub">Pintu terkunci</p>
+              <p class="stat-val" style="font-size:18px;margin-top:2px">-</p>
+              <p class="stat-sub">Belum ada data</p>
             </div>
           </article>
           <article class="stat-card info card-animate" style="animation-delay:0.2s">
             <span class="stat-icon info">🌤️</span>
             <div class="stat-info">
               <h3 class="stat-label">Status Cuaca</h3>
-              <p class="stat-val" style="font-size:18px;margin-top:2px">Cerah</p>
-              <p class="stat-sub">Tidak ada hujan</p>
+              <p class="stat-val" style="font-size:18px;margin-top:2px">-</p>
+              <p class="stat-sub">Belum ada data</p>
             </div>
           </article>
         </section>
@@ -169,35 +168,35 @@
           <article class="sensor-card sensor-gas card-animate" style="animation-delay:0.1s">
             <div class="sensor-card-header">
               <span class="sensor-icon-wrap">💨</span>
-              <span class="sensor-badge badge-normal" id="gas-badge">Normal</span>
+              <span class="sensor-badge badge-info" id="gas-badge">Belum ada data</span>
             </div>
             <h3 class="sensor-name">Gas MQ-135</h3>
-            <p><span class="sensor-value" id="gas-val">142</span><span class="sensor-unit">ppm</span></p>
-            <p class="sensor-desc">Kualitas udara baik</p>
-            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="gas-bar" style="width:28%"></div></div>
+            <p><span class="sensor-value" id="gas-val">-</span><span class="sensor-unit">ppm</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="gas-bar" style="width:0%"></div></div>
           </article>
 
           <!-- Light -->
           <article class="sensor-card sensor-light card-animate" style="animation-delay:0.15s">
             <div class="sensor-card-header">
               <span class="sensor-icon-wrap">💡</span>
-              <span class="sensor-badge badge-warning" id="light-badge">Redup</span>
+              <span class="sensor-badge badge-info" id="light-badge">Belum ada data</span>
             </div>
             <h3 class="sensor-name">Cahaya LDR</h3>
-            <p><span class="sensor-value" id="light-val">34</span><span class="sensor-unit">%</span></p>
-            <p class="sensor-desc">Kondisi pencahayaan rendah</p>
-            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="light-bar" style="width:34%"></div></div>
+            <p><span class="sensor-value" id="light-val">-</span><span class="sensor-unit">%</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="light-bar" style="width:0%"></div></div>
           </article>
 
           <!-- Rain -->
           <article class="sensor-card sensor-rain card-animate" style="animation-delay:0.2s">
             <div class="sensor-card-header">
               <span class="sensor-icon-wrap">🌧️</span>
-              <span class="sensor-badge badge-normal" id="rain-badge">Tidak Hujan</span>
+              <span class="sensor-badge badge-info" id="rain-badge">Belum ada data</span>
             </div>
             <h3 class="sensor-name">Sensor Hujan</h3>
-            <p><span class="sensor-value" id="rain-val">0</span><span class="sensor-unit">%</span></p>
-            <p class="sensor-desc">Cuaca cerah, jemuran aman</p>
+            <p><span class="sensor-value" id="rain-val">-</span><span class="sensor-unit">%</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
             <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="rain-bar" style="width:0%"></div></div>
           </article>
 
@@ -205,37 +204,37 @@
           <article class="sensor-card sensor-ultrasonic card-animate" style="animation-delay:0.25s">
             <div class="sensor-card-header">
               <span class="sensor-icon-wrap">📡</span>
-              <span class="sensor-badge badge-info" id="ultra-badge">Clear</span>
+              <span class="sensor-badge badge-info" id="ultra-badge">Belum ada data</span>
             </div>
             <h3 class="sensor-name">Ultrasonik HC-SR04</h3>
-            <p><span class="sensor-value" id="ultra-val">85</span><span class="sensor-unit">cm</span></p>
-            <p class="sensor-desc">Tidak ada objek terdeteksi</p>
-            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="ultra-bar" style="width:15%"></div></div>
+            <p><span class="sensor-value" id="ultra-val">-</span><span class="sensor-unit">cm</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" id="ultra-bar" style="width:0%"></div></div>
           </article>
 
           <!-- RFID -->
           <article class="sensor-card sensor-rfid card-animate" style="animation-delay:0.3s">
             <div class="sensor-card-header">
               <span class="sensor-icon-wrap">🔑</span>
-              <span class="sensor-badge badge-normal" id="rfid-badge">Aktif</span>
+              <span class="sensor-badge badge-info" id="rfid-badge">Belum ada data</span>
             </div>
             <h3 class="sensor-name">RFID RC522</h3>
-            <p><span class="sensor-value" style="font-size:20px;letter-spacing:1px">A4:B2</span></p>
-            <p class="sensor-desc">UID terakhir — Akses berhasil</p>
-            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:100%"></div></div>
+            <p><span class="sensor-value" style="font-size:20px;letter-spacing:1px">-</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:0%"></div></div>
           </article>
 
           <!-- System Status -->
           <article class="sensor-card card-animate" style="animation-delay:0.35s; background: linear-gradient(135deg, var(--primary), #3730A3);">
             <div class="sensor-card-header">
               <span class="sensor-icon-wrap" style="background:rgba(255,255,255,0.15);">🏠</span>
-              <span class="sensor-badge" style="background:rgba(255,255,255,0.15);color:white">Online</span>
+              <span class="sensor-badge" style="background:rgba(255,255,255,0.15);color:white">Belum terhubung</span>
             </div>
             <h3 class="sensor-name" style="color:rgba(255,255,255,0.8)">Status Sistem</h3>
             <p style="font-size:24px;font-weight:700;color:white">ESP32</p>
-            <p style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:6px">Firebase Connected</p>
+            <p style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:6px">Firebase belum dikonfigurasi</p>
             <div class="sensor-progress" style="background:rgba(255,255,255,0.15)" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-              <div class="sensor-progress-fill" style="width:100%;background:rgba(255,255,255,0.6)"></div>
+              <div class="sensor-progress-fill" style="width:0%;background:rgba(255,255,255,0.6)"></div>
             </div>
           </article>
         </section>
@@ -248,19 +247,9 @@
           </div>
           <ul class="notif-list" style="list-style:none;padding:0;margin:0">
             <li class="notif-item">
-              <span class="notif-dot" style="background:var(--success)"></span>
-              <p class="notif-text">Akses RFID berhasil — UID: A4:B2:C9:D1</p>
-              <time class="notif-time">2 mnt lalu</time>
-            </li>
-            <li class="notif-item">
-              <span class="notif-dot" style="background:var(--warning)"></span>
-              <p class="notif-text">Cahaya ruangan rendah — Lampu otomatis ON</p>
-              <time class="notif-time">8 mnt lalu</time>
-            </li>
-            <li class="notif-item">
-              <span class="notif-dot" style="background:var(--blue)"></span>
-              <p class="notif-text">Jemuran otomatis masuk — Hujan terdeteksi</p>
-              <time class="notif-time">1 jam lalu</time>
+              <span class="notif-dot" style="background:var(--text-muted)"></span>
+              <p class="notif-text">Belum ada notifikasi.</p>
+              <time class="notif-time">-</time>
             </li>
           </ul>
         </aside>
@@ -280,16 +269,16 @@
           <article class="sensor-card sensor-gas">
             <div class="sensor-card-header">
               <span class="sensor-icon-wrap" style="font-size:28px;">💨</span>
-              <span class="sensor-badge badge-normal">Normal</span>
+              <span class="sensor-badge badge-info">Belum ada data</span>
             </div>
             <h3 class="sensor-name">Gas MQ-135</h3>
-            <p><span class="sensor-value" id="m-gas-val">142</span><span class="sensor-unit">ppm</span></p>
-            <p class="sensor-desc">Batas aman: &lt; 400 ppm</p>
-            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:35%"></div></div>
+            <p><span class="sensor-value" id="m-gas-val">-</span><span class="sensor-unit">ppm</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:0%"></div></div>
             <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
-              <span style="font-size:11.5px;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--text-muted)">Min: 98</span>
-              <span style="font-size:11.5px;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--text-muted)">Max: 210</span>
-              <span style="font-size:11.5px;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--text-muted)">Avg: 145</span>
+              <span style="font-size:11.5px;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--text-muted)">Min: -</span>
+              <span style="font-size:11.5px;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--text-muted)">Max: -</span>
+              <span style="font-size:11.5px;background:var(--bg);padding:4px 10px;border-radius:6px;color:var(--text-muted)">Avg: -</span>
             </div>
           </article>
 
@@ -297,79 +286,67 @@
           <article class="sensor-card sensor-light">
             <div class="sensor-card-header">
               <span class="sensor-icon-wrap" style="font-size:28px;">☀️</span>
-              <span class="sensor-badge badge-warning">Redup</span>
+              <span class="sensor-badge badge-info">Belum ada data</span>
             </div>
             <h3 class="sensor-name">Cahaya LDR</h3>
-            <p><span class="sensor-value" id="m-light-val">34</span><span class="sensor-unit">%</span></p>
-            <p class="sensor-desc">Kondisi: Pencahayaan Rendah</p>
-            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:34%"></div></div>
-            <p style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">🔆 Lampu otomatis diaktifkan</p>
+            <p><span class="sensor-value" id="m-light-val">-</span><span class="sensor-unit">%</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:0%"></div></div>
+            <p style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">Otomasi belum aktif</p>
           </article>
 
           <!-- Rain -->
           <article class="sensor-card sensor-rain">
             <div class="sensor-card-header">
               <span class="sensor-icon-wrap" style="font-size:28px;">🌦️</span>
-              <span class="sensor-badge badge-normal">Tidak Hujan</span>
+              <span class="sensor-badge badge-info">Belum ada data</span>
             </div>
             <h3 class="sensor-name">Sensor Hujan</h3>
-            <p><span class="sensor-value" id="m-rain-val">0</span><span class="sensor-unit">%</span></p>
-            <p class="sensor-desc">Intensitas: Tidak ada</p>
+            <p><span class="sensor-value" id="m-rain-val">-</span><span class="sensor-unit">%</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
             <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:0%"></div></div>
-            <p style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">☀️ Cuaca cerah — Jemuran aman di luar</p>
+            <p style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">Otomasi belum aktif</p>
           </article>
 
           <!-- Ultrasonic -->
           <article class="sensor-card sensor-ultrasonic">
             <div class="sensor-card-header">
               <span class="sensor-icon-wrap" style="font-size:28px;">📻</span>
-              <span class="sensor-badge badge-info">Clear</span>
+              <span class="sensor-badge badge-info">Belum ada data</span>
             </div>
             <h3 class="sensor-name">Ultrasonik HC-SR04</h3>
-            <p><span class="sensor-value" id="m-ultra-val">85</span><span class="sensor-unit">cm</span></p>
-            <p class="sensor-desc">Deteksi objek: Tidak ada</p>
-            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:15%"></div></div>
-            <p style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">📏 Jarak aman &gt; 30 cm</p>
+            <p><span class="sensor-value" id="m-ultra-val">-</span><span class="sensor-unit">cm</span></p>
+            <p class="sensor-desc">Menunggu data Firebase</p>
+            <div class="sensor-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="sensor-progress-fill" style="width:0%"></div></div>
+            <p style="margin-top:12px;font-size:12.5px;color:var(--text-muted)">Belum ada pembacaan jarak</p>
           </article>
 
           <!-- RFID -->
           <article class="sensor-card sensor-rfid" style="grid-column:span 2">
             <div class="sensor-card-header">
               <span class="sensor-icon-wrap" style="font-size:28px;">🪪</span>
-              <span class="sensor-badge badge-normal">Aktif</span>
+              <span class="sensor-badge badge-info">Belum ada data</span>
             </div>
             <h3 class="sensor-name">RFID RC522</h3>
             <dl class="rfid-details" style="display:flex;gap:24px;align-items:flex-end;flex-wrap:wrap;margin:0">
               <div>
                 <dt style="font-size:12px;color:var(--text-muted);margin-bottom:4px">UID Terakhir</dt>
-                <dd style="font-size:24px;font-weight:700;font-family:monospace;color:var(--text);letter-spacing:2px;margin:0">A4:B2:C9:D1</dd>
+                <dd style="font-size:24px;font-weight:700;font-family:monospace;color:var(--text);letter-spacing:2px;margin:0">-</dd>
               </div>
               <div>
                 <dt style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Status Akses</dt>
-                <dd style="margin:0"><span class="sensor-badge badge-normal" style="font-size:13px;padding:5px 14px">✅ Berhasil</span></dd>
+                <dd style="margin:0"><span class="sensor-badge badge-info" style="font-size:13px;padding:5px 14px">Belum ada data</span></dd>
               </div>
               <div>
                 <dt style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Waktu Tap</dt>
-                <dd style="font-size:14px;font-weight:600;color:var(--text);margin:0">14:32:07</dd>
+                <dd style="font-size:14px;font-weight:600;color:var(--text);margin:0">-</dd>
               </div>
             </dl>
             <section style="margin-top:20px">
               <h4 style="font-size:12.5px;font-weight:600;color:var(--text-muted);margin-bottom:10px">Log Akses RFID</h4>
               <ul style="display:flex;flex-direction:column;gap:8px;list-style:none;padding:0;margin:0">
-                <li style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:8px 12px;background:var(--bg);border-radius:8px">
-                  <span style="font-family:monospace">A4:B2:C9:D1</span>
-                  <span class="table-badge success">Berhasil</span>
-                  <time style="color:var(--text-muted)">14:32:07</time>
-                </li>
-                <li style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:8px 12px;background:var(--bg);border-radius:8px">
-                  <span style="font-family:monospace">FF:22:AB:09</span>
-                  <span class="table-badge danger">Ditolak</span>
-                  <time style="color:var(--text-muted)">14:18:44</time>
-                </li>
-                <li style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:8px 12px;background:var(--bg);border-radius:8px">
-                  <span style="font-family:monospace">A4:B2:C9:D1</span>
-                  <span class="table-badge success">Berhasil</span>
-                  <time style="color:var(--text-muted)">08:05:12</time>
+                <li style="display:flex;justify-content:center;align-items:center;font-size:12.5px;padding:12px;background:var(--bg);border-radius:8px;color:var(--text-muted)">
+                  Belum ada log RFID.
                 </li>
               </ul>
             </section>
@@ -396,9 +373,9 @@
                 <p class="control-subtitle">Motor Stepper 28BYJ-48</p>
               </hgroup>
             </div>
-            <p class="status-indicator active" id="stepper-status">
-              <span class="status-dot active"></span>
-              Jemuran Di Luar
+          <p class="status-indicator inactive" id="stepper-status">
+              <span class="status-dot inactive"></span>
+              Belum ada status
             </p>
             <div class="control-btns">
               <button class="btn btn-primary" onclick="controlDevice('stepper','buka')">
@@ -424,9 +401,9 @@
                 <p class="control-subtitle">Servo Motor SG90</p>
               </hgroup>
             </div>
-            <p class="status-indicator locked" id="servo-status">
-              <span class="status-dot locked"></span>
-              Pintu Terkunci
+          <p class="status-indicator inactive" id="servo-status">
+              <span class="status-dot inactive"></span>
+              Belum ada status
             </p>
             <div class="control-btns">
               <button class="btn btn-success" onclick="controlDevice('servo','unlock')">
@@ -457,7 +434,7 @@
                   <p class="relay-sub">Relay 1 — 220V</p>
                 </div>
                 <label class="toggle-switch">
-                  <input type="checkbox" checked onchange="toggleRelay(1, this.checked)"/>
+                  <input type="checkbox" onchange="toggleRelay(1, this)"/>
                   <span class="toggle-slider"></span>
                 </label>
               </li>
@@ -467,7 +444,7 @@
                   <p class="relay-sub">Relay 2 — 220V</p>
                 </div>
                 <label class="toggle-switch">
-                  <input type="checkbox" onchange="toggleRelay(2, this.checked)"/>
+                  <input type="checkbox" onchange="toggleRelay(2, this)"/>
                   <span class="toggle-slider"></span>
                 </label>
               </li>
@@ -477,7 +454,7 @@
                   <p class="relay-sub">Relay 3 — 220V</p>
                 </div>
                 <label class="toggle-switch">
-                  <input type="checkbox" checked onchange="toggleRelay(3, this.checked)"/>
+                  <input type="checkbox" onchange="toggleRelay(3, this)"/>
                   <span class="toggle-slider"></span>
                 </label>
               </li>
@@ -487,7 +464,7 @@
                   <p class="relay-sub">Relay 4 — 220V</p>
                 </div>
                 <label class="toggle-switch">
-                  <input type="checkbox" onchange="toggleRelay(4, this.checked)"/>
+                  <input type="checkbox" onchange="toggleRelay(4, this)"/>
                   <span class="toggle-slider"></span>
                 </label>
               </li>
@@ -499,20 +476,20 @@
         <!-- Auto control info -->
         <section class="history-card" style="margin-top:0">
           <div class="history-header">
-            <h3 class="history-title">⚙️ Aturan Otomasi Aktif</h3>
+            <h3 class="history-title">⚙️ Aturan Otomasi</h3>
           </div>
           <ul style="padding:16px 24px;display:flex;flex-direction:column;gap:10px;list-style:none;margin:0">
             <li style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--success-bg);border-radius:10px;border:1px solid rgba(34,197,94,0.2)">
               <span style="font-size:13.5px;color:#065F46">🌧️ Jika hujan terdeteksi → Jemuran otomatis masuk</span>
-              <span class="table-badge success">Aktif</span>
+              <span class="table-badge info">Belum aktif</span>
             </li>
             <li style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--success-bg);border-radius:10px;border:1px solid rgba(34,197,94,0.2)">
-              <span style="font-size:13.5px;color:#065F46">🌑 Jika gelap (LDR &lt; 30%) → Lampu otomatis ON</span>
-              <span class="table-badge success">Aktif</span>
+              <span style="font-size:13.5px;color:#065F46">🌑 Jika gelap → Lampu otomatis ON</span>
+              <span class="table-badge info">Belum aktif</span>
             </li>
             <li style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--danger-bg);border-radius:10px;border:1px solid rgba(239,68,68,0.2)">
-              <span style="font-size:13.5px;color:#B91C1C">💨 Jika gas tinggi (&gt; 400ppm) → Alarm aktif & kirim notifikasi</span>
-              <span class="table-badge danger">Siaga</span>
+              <span style="font-size:13.5px;color:#B91C1C">💨 Jika gas tinggi → Alarm aktif & kirim notifikasi</span>
+              <span class="table-badge info">Belum aktif</span>
             </li>
           </ul>
         </section>
@@ -531,7 +508,7 @@
             <h3 class="history-title">📋 Log Aktivitas</h3>
             <div class="history-filters">
               <input type="text" class="filter-input" placeholder="🔍 Cari aktivitas..." oninput="filterTable(this.value)" style="width:200px"/>
-              <input type="date" class="filter-input" value="2025-01-27"/>
+              <input type="date" class="filter-input"/>
               <select class="filter-input">
                 <option>Semua Tipe</option>
                 <option>Sensor</option>
@@ -562,14 +539,9 @@
           </div>
 
           <footer class="table-footer">
-            <span>Menampilkan 10 dari 48 data</span>
+            <span>Belum ada data aktivitas</span>
             <nav class="pagination" aria-label="Pagination">
-              <button class="page-btn">‹</button>
               <button class="page-btn active">1</button>
-              <button class="page-btn">2</button>
-              <button class="page-btn">3</button>
-              <button class="page-btn">5</button>
-              <button class="page-btn">›</button>
             </nav>
           </footer>
         </section>
@@ -596,11 +568,11 @@
             <form style="display:flex;flex-direction:column;gap:12px" onsubmit="event.preventDefault(); showToast('Konfigurasi disimpan');">
               <div class="form-group" style="margin-bottom:0">
                 <label class="form-label" style="color:var(--text-muted);font-size:11.5px">Project ID</label>
-                <input class="filter-input" value="smarthome-esp32-demo" style="width:100%;margin-top:4px"/>
+                <input class="filter-input" placeholder="Masukkan Project ID Firebase" style="width:100%;margin-top:4px"/>
               </div>
               <div class="form-group" style="margin-bottom:0">
                 <label class="form-label" style="color:var(--text-muted);font-size:11.5px">Database URL</label>
-                <input class="filter-input" value="https://smarthome-esp32-demo-default-rtdb.firebaseio.com" style="width:100%;margin-top:4px"/>
+                <input class="filter-input" placeholder="Masukkan Database URL Firebase" style="width:100%;margin-top:4px"/>
               </div>
               <button type="submit" class="btn btn-primary">Simpan Konfigurasi</button>
             </form>
@@ -618,23 +590,23 @@
               <li class="relay-row">
                 <div>
                   <strong class="relay-label">Alert Gas Bocor</strong>
-                  <p class="relay-sub">Batas atas: 400 ppm</p>
+                  <p class="relay-sub">Belum dikonfigurasi</p>
                 </div>
-                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                <label class="toggle-switch"><input type="checkbox"/><span class="toggle-slider"></span></label>
               </li>
               <li class="relay-row">
                 <div>
                   <strong class="relay-label">Alert Hujan</strong>
-                  <p class="relay-sub">Jika intensitas &gt; 20%</p>
+                  <p class="relay-sub">Belum dikonfigurasi</p>
                 </div>
-                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                <label class="toggle-switch"><input type="checkbox"/><span class="toggle-slider"></span></label>
               </li>
               <li class="relay-row">
                 <div>
                   <strong class="relay-label">Alert Akses RFID</strong>
-                  <p class="relay-sub">Setiap tap kartu</p>
+                  <p class="relay-sub">Belum dikonfigurasi</p>
                 </div>
-                <label class="toggle-switch"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+                <label class="toggle-switch"><input type="checkbox"/><span class="toggle-slider"></span></label>
               </li>
               <li class="relay-row" style="border:none">
                 <div>
@@ -657,8 +629,7 @@
             <table>
               <thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Status</th></tr></thead>
               <tbody>
-                <tr><td>Administrator</td><td class="td-muted">admin@smarthome.id</td><td><span class="table-badge purple">Admin</span></td><td><span class="table-badge success">Aktif</span></td></tr>
-                <tr><td>Penghuni</td><td class="td-muted">user@smarthome.id</td><td><span class="table-badge info">User</span></td><td><span class="table-badge success">Aktif</span></td></tr>
+                <tr><td class="td-muted" colspan="4" style="text-align:center;padding:18px">Belum ada data pengguna.</td></tr>
               </tbody>
             </table>
           </article>
@@ -670,6 +641,15 @@
   </div><!-- /main-content -->
 </div><!-- /app-layout -->
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<!-- Firebase Config -->
+<script src="js/firebase-config.js"></script>
+
+<!-- App Logic -->
 <script src="js/app.js"></script>
 </body>
 </html>

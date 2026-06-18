@@ -1,6 +1,7 @@
 /* ===================================================
-   SmartHome — app.js
-   Dashboard Interactivity & Simulated Sensor Data
+   SmartHome - app.js
+   Firebase Realtime Database Integration
+   Sensor monitoring, device control & activity logging
    =================================================== */
 
 // ==================== NAVIGATION ====================
@@ -8,23 +9,21 @@ let currentPage = 'dashboard';
 let sidebarOpen = true;
 
 function setPage(name) {
-  // Hide all panels
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  // Show target
+
   const target = document.getElementById('page-' + name);
   if (target) {
     target.classList.add('active');
     target.classList.add('fade-in');
     setTimeout(() => target.classList.remove('fade-in'), 400);
   }
-  // Update nav
+
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   const navItems = document.querySelectorAll('.nav-item');
-  const pageIndex = ['dashboard','monitoring','control','history','settings'].indexOf(name);
+  const pageIndex = ['dashboard', 'monitoring', 'control', 'history', 'settings'].indexOf(name);
   if (navItems[pageIndex]) navItems[pageIndex].classList.add('active');
   currentPage = name;
 
-  // Close sidebar on mobile
   if (window.innerWidth < 900) closeSidebar();
 }
 
@@ -60,7 +59,7 @@ function toggleTheme() {
   } else {
     icon.innerHTML = '<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>';
   }
-  // Sync settings toggle
+
   const darkToggle = document.getElementById('dark-toggle');
   if (darkToggle) darkToggle.checked = isDark;
 }
@@ -74,9 +73,9 @@ function updateClock() {
   const el = document.getElementById('navbar-clock');
   if (!el) return;
   const now = new Date();
-  const h = String(now.getHours()).padStart(2,'0');
-  const m = String(now.getMinutes()).padStart(2,'0');
-  const s = String(now.getSeconds()).padStart(2,'0');
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const s = String(now.getSeconds()).padStart(2, '0');
   el.textContent = `${h}:${m}:${s}`;
 }
 setInterval(updateClock, 1000);
@@ -84,6 +83,9 @@ updateClock();
 
 // ==================== NOTIFICATIONS ====================
 let notifVisible = false;
+let notifCount = 0;
+const notifications = [];
+
 function toggleNotifPanel() {
   const panel = document.getElementById('notif-panel');
   if (!panel) return;
@@ -91,168 +93,673 @@ function toggleNotifPanel() {
   panel.style.display = notifVisible ? 'block' : 'none';
 }
 
-// ==================== SENSOR SIMULATION ====================
-const sensorData = {
-  gas: { val: 142, min: 80, max: 500, unit: 'ppm', warn: 300 },
-  light: { val: 34, min: 0, max: 100, unit: '%', warn: 30 },
-  rain: { val: 0, min: 0, max: 100, unit: '%', warn: 20 },
-  ultra: { val: 85, min: 2, max: 400, unit: 'cm', warn: 30 },
+function addNotification(text, type = 'info') {
+  const now = new Date();
+  const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+  notifications.unshift({ text, type, time: timeStr });
+  if (notifications.length > 50) notifications.pop();
+
+  notifCount++;
+  const badge = document.querySelector('.notif-badge');
+  if (badge) badge.textContent = notifCount > 99 ? '99+' : notifCount;
+
+  renderNotifications();
+}
+
+function renderNotifications() {
+  const list = document.querySelector('.notif-list');
+  if (!list) return;
+
+  if (notifications.length === 0) {
+    list.innerHTML = `
+      <li class="notif-item">
+        <span class="notif-dot" style="background:var(--text-muted)"></span>
+        <p class="notif-text">Belum ada notifikasi.</p>
+        <time class="notif-time">-</time>
+      </li>`;
+    return;
+  }
+
+  const dotColors = {
+    info: '#3B82F6',
+    warning: '#F59E0B',
+    danger: '#EF4444',
+    success: '#22C55E'
+  };
+
+  list.innerHTML = notifications.slice(0, 20).map(n => `
+    <li class="notif-item">
+      <span class="notif-dot" style="background:${dotColors[n.type] || '#3B82F6'}"></span>
+      <p class="notif-text">${n.text}</p>
+      <time class="notif-time">${n.time}</time>
+    </li>
+  `).join('');
+}
+
+// ==================== UTILITY FUNCTIONS ====================
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+function setBadge(id, text, className = 'sensor-badge badge-info') {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className = className;
+}
+
+function setProgress(id, percent) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.style.width = Math.min(100, Math.max(0, percent)) + '%';
+    el.style.transition = 'width 0.6s ease';
+  }
+}
+
+function getTimeStamp() {
+  const now = new Date();
+  return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+}
+
+// ==================== ACTIVITY LOG ====================
+const activityLog = [];
+const MAX_LOG = 100;
+
+function addActivity(type, activity, value, status, statusText) {
+  activityLog.unshift({
+    time: getTimeStamp(),
+    type,
+    activity,
+    value: String(value),
+    status,
+    statusText
+  });
+  if (activityLog.length > MAX_LOG) activityLog.pop();
+  renderHistory(activityLog);
+}
+
+// ==================== SENSOR DATA TRACKING ====================
+const sensorHistory = {
+  gas: { min: Infinity, max: -Infinity, sum: 0, count: 0 },
+  ldr: { min: Infinity, max: -Infinity, sum: 0, count: 0 },
+  rain: { min: Infinity, max: -Infinity, sum: 0, count: 0 },
+  ultrasonic: { min: Infinity, max: -Infinity, sum: 0, count: 0 }
 };
 
-function randomWalk(current, min, max, step) {
-  const delta = (Math.random() - 0.45) * step;
-  return Math.max(min, Math.min(max, Math.round((current + delta) * 10) / 10));
+function updateSensorStats(sensor, value) {
+  const stats = sensorHistory[sensor];
+  if (!stats) return;
+  stats.min = Math.min(stats.min, value);
+  stats.max = Math.max(stats.max, value);
+  stats.sum += value;
+  stats.count++;
 }
 
-function updateSensors() {
-  sensorData.gas.val = randomWalk(sensorData.gas.val, 80, 500, 18);
-  sensorData.light.val = randomWalk(sensorData.light.val, 0, 100, 5);
-  sensorData.rain.val = randomWalk(sensorData.rain.val, 0, 100, 8);
-  sensorData.ultra.val = randomWalk(sensorData.ultra.val, 2, 400, 12);
+function getSensorAvg(sensor) {
+  const stats = sensorHistory[sensor];
+  if (!stats || stats.count === 0) return 0;
+  return (stats.sum / stats.count).toFixed(1);
+}
 
-  // Gas
-  const gasEl = document.getElementById('gas-val');
-  const gasMEl = document.getElementById('m-gas-val');
-  const gasBar = document.getElementById('gas-bar');
-  const gasBadge = document.getElementById('gas-badge');
-  if (gasEl) gasEl.textContent = sensorData.gas.val;
-  if (gasMEl) gasMEl.textContent = sensorData.gas.val;
-  const gasPct = Math.min(100, (sensorData.gas.val / 500) * 100);
-  if (gasBar) gasBar.style.width = gasPct + '%';
-  if (gasBadge) {
-    if (sensorData.gas.val > 400) {
-      gasBadge.textContent = 'BAHAYA';
-      gasBadge.className = 'sensor-badge badge-danger';
-      showAlert('gas');
-    } else if (sensorData.gas.val > 250) {
-      gasBadge.textContent = 'Waspada';
-      gasBadge.className = 'sensor-badge badge-warning';
-    } else {
-      gasBadge.textContent = 'Normal';
-      gasBadge.className = 'sensor-badge badge-normal';
-    }
+// ==================== FIREBASE REALTIME LISTENERS ====================
+let sensorsActive = 0;
+let devicesActive = 0;
+let lastGasValue = 0;
+let lastRainValue = 0;
+let lastLightValue = 0;
+
+function initFirebaseListeners() {
+  if (typeof firebase === 'undefined' || !db) {
+    console.warn('⚠️ Firebase belum diinisialisasi');
+    return;
   }
 
-  // Light
-  const lightEl = document.getElementById('light-val');
-  const lightMEl = document.getElementById('m-light-val');
-  const lightBar = document.getElementById('light-bar');
-  const lightBadge = document.getElementById('light-badge');
-  if (lightEl) lightEl.textContent = sensorData.light.val;
-  if (lightMEl) lightMEl.textContent = sensorData.light.val;
-  if (lightBar) lightBar.style.width = sensorData.light.val + '%';
-  if (lightBadge) {
-    if (sensorData.light.val < 20) {
-      lightBadge.textContent = 'Gelap';
-      lightBadge.className = 'sensor-badge badge-danger';
-    } else if (sensorData.light.val < 50) {
-      lightBadge.textContent = 'Redup';
-      lightBadge.className = 'sensor-badge badge-warning';
+  console.log('🔄 Memulai Firebase Realtime listeners...');
+
+  // ===== SENSOR: GAS MQ-135 =====
+  db.ref('Smarthome/nilai_gas').on('value', (snapshot) => {
+    const val = snapshot.val();
+    if (val === null) return;
+
+    const gasValue = Number(val);
+    lastGasValue = gasValue;
+    sensorsActive = countActiveSensors();
+
+    // Update dashboard & monitoring values
+    setText('gas-val', gasValue.toFixed(0));
+    setText('m-gas-val', gasValue.toFixed(0));
+
+    // Progress bar (assume 0-4095 range for raw ADC)
+    const gasPercent = (gasValue / 4095) * 100;
+    setProgress('gas-bar', gasPercent);
+
+    // Update monitoring progress bars
+    updateMonitoringProgress('sensor-gas', gasPercent);
+
+    // Update stats
+    updateSensorStats('gas', gasValue);
+    updateMonitoringStats('gas');
+
+    // Badge status
+    let gasBadgeClass, gasBadgeText;
+    if (gasValue < 1500) {
+      gasBadgeClass = 'sensor-badge badge-success';
+      gasBadgeText = 'Aman';
+    } else if (gasValue < 2800) {
+      gasBadgeClass = 'sensor-badge badge-warning';
+      gasBadgeText = 'Waspada';
     } else {
-      lightBadge.textContent = 'Terang';
-      lightBadge.className = 'sensor-badge badge-normal';
+      gasBadgeClass = 'sensor-badge badge-danger';
+      gasBadgeText = 'Bahaya!';
     }
+    setBadge('gas-badge', gasBadgeText, gasBadgeClass);
+    updateMonitoringBadge('sensor-gas', gasBadgeText, gasBadgeClass);
+
+    // Update sensor description
+    updateSensorDesc('sensor-gas', `Terakhir update: ${getTimeStamp()}`);
+
+    // Gas alert
+    const alertGas = document.getElementById('alert-gas');
+    if (gasValue >= 2800 && alertGas) {
+      alertGas.style.display = 'flex';
+      addNotification(`⚠️ Gas tinggi terdeteksi: ${gasValue.toFixed(0)}`, 'danger');
+    } else if (alertGas) {
+      alertGas.style.display = 'none';
+    }
+
+    // Automation badge update
+    updateAutomationBadge(2, gasValue >= 2800 ? 'Aktif' : 'Standby', gasValue >= 2800 ? 'danger' : 'success');
+
+    addActivity('Sensor', 'Gas MQ-135', `${gasValue.toFixed(0)}`, gasValue < 1500 ? 'success' : gasValue < 2800 ? 'warning' : 'danger', gasBadgeText);
+    updateDashboardStats();
+  });
+
+  // ===== SENSOR: LDR (CAHAYA) =====
+  db.ref('Smarthome/persen_cahaya').on('value', (snapshot) => {
+    const val = snapshot.val();
+    if (val === null) return;
+
+    const lightValue = Number(val);
+    lastLightValue = lightValue;
+    sensorsActive = countActiveSensors();
+
+    setText('light-val', lightValue.toFixed(0));
+    setText('m-light-val', lightValue.toFixed(0));
+
+    const lightPercent = Math.min(100, lightValue);
+    setProgress('light-bar', lightPercent);
+    updateMonitoringProgress('sensor-light', lightPercent);
+
+    updateSensorStats('ldr', lightValue);
+
+    let lightBadgeClass, lightBadgeText;
+    if (lightValue > 70) {
+      lightBadgeClass = 'sensor-badge badge-success';
+      lightBadgeText = 'Terang';
+    } else if (lightValue > 30) {
+      lightBadgeClass = 'sensor-badge badge-warning';
+      lightBadgeText = 'Redup';
+    } else {
+      lightBadgeClass = 'sensor-badge badge-info';
+      lightBadgeText = 'Gelap';
+    }
+    setBadge('light-badge', lightBadgeText, lightBadgeClass);
+    updateMonitoringBadge('sensor-light', lightBadgeText, lightBadgeClass);
+    updateSensorDesc('sensor-light', `Terakhir update: ${getTimeStamp()}`);
+
+    // Automation: auto-lamp
+    updateAutomationBadge(1, lightValue <= 30 ? 'Aktif' : 'Standby', lightValue <= 30 ? 'success' : 'info');
+
+    // Update monitoring auto status
+    const lightAutoEl = document.querySelectorAll('#page-monitoring .sensor-light p[style*="12.5px"]');
+    lightAutoEl.forEach(el => {
+      el.textContent = lightValue <= 30 ? '💡 Otomasi aktif — Lampu ON' : '☀️ Cukup terang — Lampu otomatis OFF';
+    });
+
+    addActivity('Sensor', 'Cahaya LDR', `${lightValue.toFixed(0)}%`, lightValue > 30 ? 'success' : 'info', lightBadgeText);
+    updateDashboardStats();
+  });
+
+  // ===== SENSOR: RAIN =====
+  db.ref('Smarthome/persen_hujan').on('value', (snapshot) => {
+    const val = snapshot.val();
+    if (val === null) return;
+
+    const rainValue = Number(val);
+    lastRainValue = rainValue;
+    sensorsActive = countActiveSensors();
+
+    setText('rain-val', rainValue.toFixed(0));
+    setText('m-rain-val', rainValue.toFixed(0));
+
+    const rainPercent = Math.min(100, rainValue);
+    setProgress('rain-bar', rainPercent);
+    updateMonitoringProgress('sensor-rain', rainPercent);
+
+    updateSensorStats('rain', rainValue);
+
+    let rainBadgeClass, rainBadgeText;
+    if (rainValue < 30) {
+      rainBadgeClass = 'sensor-badge badge-success';
+      rainBadgeText = 'Cerah';
+    } else if (rainValue < 70) {
+      rainBadgeClass = 'sensor-badge badge-warning';
+      rainBadgeText = 'Gerimis';
+    } else {
+      rainBadgeClass = 'sensor-badge badge-danger';
+      rainBadgeText = 'Hujan Deras';
+    }
+    setBadge('rain-badge', rainBadgeText, rainBadgeClass);
+    updateMonitoringBadge('sensor-rain', rainBadgeText, rainBadgeClass);
+    updateSensorDesc('sensor-rain', `Terakhir update: ${getTimeStamp()}`);
+
+    // Automation: auto-jemuran
+    updateAutomationBadge(0, rainValue >= 30 ? 'Aktif' : 'Standby', rainValue >= 30 ? 'success' : 'info');
+
+    // Update monitoring auto status
+    const rainAutoEl = document.querySelectorAll('#page-monitoring .sensor-rain p[style*="12.5px"]');
+    rainAutoEl.forEach(el => {
+      el.textContent = rainValue >= 30 ? '🌧️ Hujan — Jemuran auto-masuk' : '☀️ Cuaca cerah — Aman dijemur';
+    });
+
+    // Update weather stat card
+    const weatherStat = document.querySelectorAll('.stat-card.info .stat-val');
+    weatherStat.forEach(el => {
+      el.textContent = rainBadgeText;
+      el.style.fontSize = '18px';
+    });
+    const weatherSub = document.querySelectorAll('.stat-card.info .stat-sub');
+    weatherSub.forEach(el => {
+      el.textContent = `Kelembapan hujan: ${rainValue.toFixed(0)}%`;
+    });
+
+    addActivity('Sensor', 'Sensor Hujan', `${rainValue.toFixed(0)}%`, rainValue < 30 ? 'success' : rainValue < 70 ? 'warning' : 'danger', rainBadgeText);
+    updateDashboardStats();
+  });
+
+  // ===== SENSOR: ULTRASONIC HC-SR04 =====
+  db.ref('Smarthome/jarak_air').on('value', (snapshot) => {
+    const val = snapshot.val();
+    if (val === null) return;
+
+    const ultraValue = Number(val);
+    sensorsActive = countActiveSensors();
+
+    setText('ultra-val', ultraValue.toFixed(1));
+    setText('m-ultra-val', ultraValue.toFixed(1));
+
+    // Progress (assume 0-400cm range)
+    const ultraPercent = (ultraValue / 400) * 100;
+    setProgress('ultra-bar', ultraPercent);
+    updateMonitoringProgress('sensor-ultrasonic', ultraPercent);
+
+    updateSensorStats('ultrasonic', ultraValue);
+
+    let ultraBadgeClass, ultraBadgeText;
+    if (ultraValue < 10) {
+      ultraBadgeClass = 'sensor-badge badge-danger';
+      ultraBadgeText = 'Sangat Dekat';
+    } else if (ultraValue < 50) {
+      ultraBadgeClass = 'sensor-badge badge-warning';
+      ultraBadgeText = 'Dekat';
+    } else {
+      ultraBadgeClass = 'sensor-badge badge-success';
+      ultraBadgeText = 'Jauh';
+    }
+    setBadge('ultra-badge', ultraBadgeText, ultraBadgeClass);
+    updateMonitoringBadge('sensor-ultrasonic', ultraBadgeText, ultraBadgeClass);
+    updateSensorDesc('sensor-ultrasonic', `Terakhir update: ${getTimeStamp()}`);
+
+    // Update monitoring distance desc
+    const ultraAutoEl = document.querySelectorAll('#page-monitoring .sensor-ultrasonic p[style*="12.5px"]');
+    ultraAutoEl.forEach(el => {
+      el.textContent = `Jarak terdeteksi: ${ultraValue.toFixed(1)} cm`;
+    });
+
+    addActivity('Sensor', 'Ultrasonik HC-SR04', `${ultraValue.toFixed(1)} cm`, ultraValue < 10 ? 'danger' : 'success', ultraBadgeText);
+    updateDashboardStats();
+  });
+
+  // ===== SENSOR: RFID RC522 =====
+  db.ref('Smarthome/status_rfid').on('value', (snapshot) => {
+    const val = snapshot.val();
+    if (!val) return;
+
+    sensorsActive = countActiveSensors();
+
+    const uid = '-';
+    const access = val;
+    const timestamp = getTimeStamp();
+
+    // Update dashboard RFID card
+    const rfidCard = document.querySelector('.sensor-rfid');
+    if (rfidCard) {
+      const rfidValue = rfidCard.querySelector('.sensor-value');
+      if (rfidValue) rfidValue.textContent = 'Kartu';
+
+      const rfidBadge = document.getElementById('rfid-badge');
+      if (rfidBadge) {
+        if (access === 'Akses Diterima') {
+          rfidBadge.textContent = 'Akses Diberikan';
+          rfidBadge.className = 'sensor-badge badge-success';
+        } else if (access.includes('Ditolak')) {
+          rfidBadge.textContent = 'Akses Ditolak';
+          rfidBadge.className = 'sensor-badge badge-danger';
+        } else {
+          rfidBadge.textContent = access;
+          rfidBadge.className = 'sensor-badge badge-info';
+        }
+      }
+    }
+
+    // Update monitoring page RFID details
+    const rfidDetails = document.querySelector('#page-monitoring .sensor-rfid');
+    if (rfidDetails) {
+      const uidEl = rfidDetails.querySelector('dd[style*="24px"]');
+      if (uidEl) uidEl.textContent = '-';
+
+      const accessBadge = rfidDetails.querySelector('dd .sensor-badge');
+      if (accessBadge) {
+        if (access === 'Akses Diterima') {
+          accessBadge.textContent = 'Akses Diberikan';
+          accessBadge.className = 'sensor-badge badge-success';
+          accessBadge.style.fontSize = '13px';
+          accessBadge.style.padding = '5px 14px';
+        } else if (access.includes('Ditolak')) {
+          accessBadge.textContent = 'Akses Ditolak';
+          accessBadge.className = 'sensor-badge badge-danger';
+          accessBadge.style.fontSize = '13px';
+          accessBadge.style.padding = '5px 14px';
+        } else {
+          accessBadge.textContent = access;
+          accessBadge.className = 'sensor-badge badge-info';
+          accessBadge.style.fontSize = '13px';
+          accessBadge.style.padding = '5px 14px';
+        }
+      }
+
+      const timeEl = rfidDetails.querySelector('dd[style*="14px"][style*="600"]');
+      if (timeEl) timeEl.textContent = timestamp;
+
+      // Monitoring RFID badge
+      const monBadge = rfidDetails.querySelector('.sensor-card-header .sensor-badge');
+      if (monBadge) {
+        monBadge.textContent = access === 'Akses Diterima' ? 'Akses OK' : (access.includes('Ditolak') ? 'Akses Ditolak' : access);
+        monBadge.className = access === 'Akses Diterima' ? 'sensor-badge badge-success' : (access.includes('Ditolak') ? 'sensor-badge badge-danger' : 'sensor-badge badge-info');
+      }
+    }
+
+    // Update dashboard RFID desc
+    updateSensorDesc('sensor-rfid', `Status: ${access}`);
+
+    if (access === 'Akses Diterima' || access.includes('Ditolak')) {
+      addNotification(`🔑 RFID: ${access}`, access === 'Akses Diterima' ? 'success' : 'warning');
+      addActivity('RFID', 'Tap RFID', 'Kartu', access === 'Akses Diterima' ? 'success' : 'danger', access);
+    }
+
+    // Update security stat
+    const secStat = document.querySelectorAll('.stat-card.warning .stat-val');
+    secStat.forEach(el => {
+      el.textContent = access === 'Akses Diterima' ? 'Aman' : (access.includes('Ditolak') ? 'Waspada' : 'Standby');
+      el.style.fontSize = '18px';
+    });
+    const secSub = document.querySelectorAll('.stat-card.warning .stat-sub');
+    secSub.forEach(el => {
+      el.textContent = `Status: ${access}`;
+    });
+
+    updateDashboardStats();
+  });
+
+  // ===== RFID LOG =====
+  db.ref('rfid_log').orderByKey().limitToLast(10).on('value', (snapshot) => {
+    const data = snapshot.val();
+    if (!data) return;
+
+    const logContainer = document.querySelector('#page-monitoring .sensor-rfid ul');
+    if (!logContainer) return;
+
+    const entries = Object.values(data).reverse();
+    logContainer.innerHTML = entries.map(entry => {
+      const isGranted = entry.access === 'granted' || entry.access === 'Akses Diberikan';
+      return `
+        <li style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding:10px 14px;background:var(--bg);border-radius:8px">
+          <span>
+            <span style="font-weight:600;font-family:monospace;letter-spacing:1px">${entry.uid || '-'}</span>
+            <span class="sensor-badge ${isGranted ? 'badge-success' : 'badge-danger'}" style="font-size:10px;padding:2px 8px;margin-left:8px">${entry.access || '-'}</span>
+          </span>
+          <time style="color:var(--text-muted);font-size:11px">${entry.timestamp || '-'}</time>
+        </li>
+      `;
+    }).join('');
+  });
+
+  // ===== ACTUATOR: STEPPER =====
+  db.ref('Smarthome/jemuran_masuk').on('value', (snapshot) => {
+    const val = snapshot.val();
+    if (val === null) return;
+
+    const statusEl = document.getElementById('stepper-status');
+    if (statusEl) {
+      const isMasuk = val === true;
+      statusEl.innerHTML = `
+        <span class="status-dot ${!isMasuk ? 'active' : 'inactive'}"></span>
+        ${!isMasuk ? 'Jemuran Keluar' : 'Jemuran Masuk'}
+      `;
+      statusEl.className = `status-indicator ${!isMasuk ? 'active' : 'inactive'}`;
+    }
+
+    devicesActive = countActiveDevices();
+    updateDashboardStats();
+  });
+
+  // ===== ACTUATOR: SERVO (DOOR) =====
+  db.ref('actuator/servo').on('value', (snapshot) => {
+    const val = snapshot.val();
+    if (val === null) return;
+
+    const statusEl = document.getElementById('servo-status');
+    if (statusEl) {
+      const isUnlocked = val === 'unlock' || val === 'buka' || val === true;
+      statusEl.innerHTML = `
+        <span class="status-dot ${isUnlocked ? 'active' : 'inactive'}"></span>
+        ${isUnlocked ? '🔓 Pintu Terbuka' : '🔒 Pintu Terkunci'}
+      `;
+      statusEl.className = `status-indicator ${isUnlocked ? 'active' : 'inactive'}`;
+    }
+
+    devicesActive = countActiveDevices();
+    updateDashboardStats();
+    addActivity('Pintu', 'Servo SG90', val, val === 'unlock' ? 'success' : 'info', val === 'unlock' ? 'Terbuka' : 'Terkunci');
+  });
+
+  // ===== ACTUATOR: RELAYS =====
+  for (let i = 1; i <= 2; i++) {
+    db.ref(`Smarthome/relay${i}_nyala`).on('value', (snapshot) => {
+      const val = snapshot.val();
+      if (val === null) return;
+
+      const isOn = val === true;
+
+      // Update toggle switch state
+      const toggles = document.querySelectorAll('.toggle-switch input[type="checkbox"]');
+      const relayIndex = i - 1;
+      if (toggles[relayIndex]) {
+        toggles[relayIndex].checked = isOn;
+      }
+
+      devicesActive = countActiveDevices();
+      updateDashboardStats();
+    });
   }
 
-  // Rain
-  const rainEl = document.getElementById('rain-val');
-  const rainMEl = document.getElementById('m-rain-val');
-  const rainBar = document.getElementById('rain-bar');
-  const rainBadge = document.getElementById('rain-badge');
-  if (rainEl) rainEl.textContent = sensorData.rain.val;
-  if (rainMEl) rainMEl.textContent = sensorData.rain.val;
-  if (rainBar) rainBar.style.width = sensorData.rain.val + '%';
-  if (rainBadge) {
-    if (sensorData.rain.val > 50) {
-      rainBadge.textContent = 'Hujan Deras';
-      rainBadge.className = 'sensor-badge badge-danger';
-    } else if (sensorData.rain.val > 20) {
-      rainBadge.textContent = 'Gerimis';
-      rainBadge.className = 'sensor-badge badge-warning';
-    } else {
-      rainBadge.textContent = 'Tidak Hujan';
-      rainBadge.className = 'sensor-badge badge-normal';
-    }
-  }
+  // ===== SYSTEM STATUS =====
+  db.ref('system/status').on('value', (snapshot) => {
+    const val = snapshot.val();
+    if (val === null) return;
 
-  // Ultrasonic
-  const ultraEl = document.getElementById('ultra-val');
-  const ultraMEl = document.getElementById('m-ultra-val');
-  const ultraBar = document.getElementById('ultra-bar');
-  const ultraBadge = document.getElementById('ultra-badge');
-  if (ultraEl) ultraEl.textContent = sensorData.ultra.val;
-  if (ultraMEl) ultraMEl.textContent = sensorData.ultra.val;
-  const ultraPct = Math.max(0, 100 - (sensorData.ultra.val / 400 * 100));
-  if (ultraBar) ultraBar.style.width = ultraPct + '%';
-  if (ultraBadge) {
-    if (sensorData.ultra.val < 15) {
-      ultraBadge.textContent = 'Objek Dekat!';
-      ultraBadge.className = 'sensor-badge badge-danger';
-    } else if (sensorData.ultra.val < 30) {
-      ultraBadge.textContent = 'Dekat';
-      ultraBadge.className = 'sensor-badge badge-warning';
-    } else {
-      ultraBadge.textContent = 'Clear';
-      ultraBadge.className = 'sensor-badge badge-info';
+    const sysCards = document.querySelectorAll('.sensor-card');
+    sysCards.forEach(card => {
+      const nameEl = card.querySelector('.sensor-name');
+      if (nameEl && nameEl.textContent === 'Status Sistem') {
+        const statusP = card.querySelector('p[style*="24px"]');
+        if (statusP) statusP.textContent = `ESP32 — ${val}`;
+      }
+    });
+  });
+
+  addNotification('🔥 Firebase terhubung! Data realtime aktif.', 'success');
+  console.log('✅ Semua Firebase listeners aktif');
+}
+
+// ==================== HELPER: UPDATE MONITORING PAGE ====================
+function updateMonitoringProgress(cardClass, percent) {
+  const cards = document.querySelectorAll(`#page-monitoring .${cardClass}`);
+  cards.forEach(card => {
+    const bar = card.querySelector('.sensor-progress-fill');
+    if (bar) {
+      bar.style.width = Math.min(100, Math.max(0, percent)) + '%';
+      bar.style.transition = 'width 0.6s ease';
+    }
+  });
+}
+
+function updateMonitoringBadge(cardClass, text, className) {
+  const cards = document.querySelectorAll(`#page-monitoring .${cardClass}`);
+  cards.forEach(card => {
+    const badge = card.querySelector('.sensor-badge');
+    if (badge) {
+      badge.textContent = text;
+      badge.className = className;
+    }
+  });
+}
+
+function updateSensorDesc(cardClass, text) {
+  // Update both dashboard and monitoring sensor descriptions
+  document.querySelectorAll(`.${cardClass} .sensor-desc`).forEach(el => {
+    el.textContent = text;
+  });
+}
+
+function updateMonitoringStats(sensor) {
+  const stats = sensorHistory[sensor];
+  if (!stats || stats.count === 0) return;
+
+  const sensorClassMap = { gas: 'sensor-gas', ldr: 'sensor-light', rain: 'sensor-rain', ultrasonic: 'sensor-ultrasonic' };
+  const cardClass = sensorClassMap[sensor];
+
+  const cards = document.querySelectorAll(`#page-monitoring .${cardClass}`);
+  cards.forEach(card => {
+    const statSpans = card.querySelectorAll('span[style*="11.5px"]');
+    if (statSpans.length >= 3) {
+      statSpans[0].textContent = `Min: ${stats.min === Infinity ? '-' : stats.min.toFixed(1)}`;
+      statSpans[1].textContent = `Max: ${stats.max === -Infinity ? '-' : stats.max.toFixed(1)}`;
+      statSpans[2].textContent = `Avg: ${getSensorAvg(sensor)}`;
+    }
+  });
+}
+
+function updateAutomationBadge(index, text, type) {
+  const rules = document.querySelectorAll('#page-control .history-card li');
+  if (rules[index]) {
+    const badge = rules[index].querySelector('.table-badge');
+    if (badge) {
+      badge.textContent = text;
+      badge.className = `table-badge ${type}`;
     }
   }
 }
 
-setInterval(updateSensors, 2500);
+// ==================== COUNT ACTIVE SENSORS & DEVICES ====================
+function countActiveSensors() {
+  let count = 0;
+  if (sensorHistory.gas.count > 0) count++;
+  if (sensorHistory.ldr.count > 0) count++;
+  if (sensorHistory.rain.count > 0) count++;
+  if (sensorHistory.ultrasonic.count > 0) count++;
+  // RFID counts as a sensor too
+  const rfidBadge = document.getElementById('rfid-badge');
+  if (rfidBadge && rfidBadge.textContent !== 'Belum ada data') count++;
+  return count;
+}
 
-function showAlert(type) {
-  if (type === 'gas') {
-    const el = document.getElementById('alert-gas');
-    if (el) el.style.display = 'flex';
-  }
+function countActiveDevices() {
+  let count = 0;
+  const toggles = document.querySelectorAll('#page-control .toggle-switch input[type="checkbox"]');
+  toggles.forEach(t => { if (t.checked) count++; });
+
+  const stepperStatus = document.getElementById('stepper-status');
+  if (stepperStatus && stepperStatus.textContent.includes('Terbuka')) count++;
+
+  const servoStatus = document.getElementById('servo-status');
+  if (servoStatus && servoStatus.textContent.includes('Terbuka')) count++;
+
+  return count;
+}
+
+function updateDashboardStats() {
+  // Total sensors
+  const totalSensorEl = document.querySelectorAll('.stat-card.primary .stat-val');
+  totalSensorEl.forEach(el => el.textContent = '5');
+  const sensorSubEl = document.querySelectorAll('.stat-card.primary .stat-sub');
+  sensorSubEl.forEach(el => el.textContent = `${sensorsActive} sensor aktif`);
+
+  // Active devices
+  const devEl = document.querySelectorAll('.stat-card.success .stat-val');
+  devEl.forEach(el => el.textContent = devicesActive);
+  const devSubEl = document.querySelectorAll('.stat-card.success .stat-sub');
+  devSubEl.forEach(el => el.textContent = `dari 7 perangkat`);
 }
 
 // ==================== DEVICE CONTROL ====================
 function controlDevice(device, action) {
-  const statusEl = document.getElementById(device + '-status');
-  if (!statusEl) return;
-
-  // Simulate sending to Firebase
-  const dot = statusEl.querySelector('.status-dot');
+  if (typeof firebase === 'undefined' || !db) {
+    showToast('❌ Firebase belum terhubung!');
+    return;
+  }
 
   if (device === 'stepper') {
-    if (action === 'buka') {
-      statusEl.className = 'status-indicator active';
-      statusEl.innerHTML = '<span class="status-dot active"></span> Jemuran Di Luar';
-      addHistoryEntry('Jemuran', 'Buka jemuran', 'Manual', 'success');
-    } else {
-      statusEl.className = 'status-indicator inactive';
-      statusEl.innerHTML = '<span class="status-dot inactive"></span> Jemuran Masuk';
-      addHistoryEntry('Jemuran', 'Tutup jemuran', 'Manual', 'warning');
-    }
+    db.ref('Smarthome/jemuran_masuk').set(action === 'tutup');
+  } else if (device === 'servo') {
+    db.ref('Smarthome/status_rfid').set(action === 'unlock' ? 'Akses Diterima' : 'Pintu Tertutup');
+  } else {
+    db.ref(`actuator/${device}`).set(action);
   }
-
-  if (device === 'servo') {
-    if (action === 'unlock') {
-      statusEl.className = 'status-indicator unlocked';
-      statusEl.innerHTML = '<span class="status-dot unlocked"></span> Pintu Terbuka';
-      addHistoryEntry('Pintu', 'Buka pintu', 'Manual', 'success');
-      // Auto-lock after 5 seconds
-      setTimeout(() => {
-        if (statusEl) {
-          statusEl.className = 'status-indicator locked';
-          statusEl.innerHTML = '<span class="status-dot locked"></span> Pintu Terkunci';
-          addHistoryEntry('Pintu', 'Auto-kunci pintu', 'Otomatis', 'info');
-        }
-      }, 5000);
-    } else {
-      statusEl.className = 'status-indicator locked';
-      statusEl.innerHTML = '<span class="status-dot locked"></span> Pintu Terkunci';
-      addHistoryEntry('Pintu', 'Kunci pintu', 'Manual', 'info');
-    }
-  }
-
-  showToast(`Perintah "${action}" dikirim ke ${device} via Firebase`);
+  
+  Promise.resolve()
+    .then(() => {
+      showToast(`✅ ${device === 'stepper' ? 'Jemuran' : 'Pintu'}: ${action}`);
+      addNotification(`🎛️ ${device === 'stepper' ? 'Jemuran' : 'Pintu'} — ${action}`, 'success');
+    })
+    .catch((err) => {
+      showToast(`❌ Gagal mengirim perintah: ${err.message}`);
+      console.error('Control error:', err);
+    });
 }
 
-function toggleRelay(relay, state) {
-  addHistoryEntry('Relay', `Relay ${relay} ${state ? 'ON' : 'OFF'}`, state ? '1' : '0', state ? 'success' : 'warning');
-  showToast(`Relay ${relay} ${state ? 'dinyalakan' : 'dimatikan'}`);
+function toggleRelay(relayNum, checkbox) {
+  if (typeof firebase === 'undefined' || !db) {
+    if (checkbox) checkbox.checked = !checkbox.checked;
+    showToast('❌ Firebase belum terhubung!');
+    return;
+  }
+
+  const isOn = checkbox ? checkbox.checked : false;
+
+  db.ref(`Smarthome/relay${relayNum}_nyala`).set(isOn)
+    .then(() => {
+      const relayNames = ['Lampu Ruang Tamu', 'Lampu Kamar', 'Stop Kontak 1', 'Stop Kontak 2'];
+      showToast(`✅ ${relayNames[relayNum - 1]}: ${isOn ? 'ON' : 'OFF'}`);
+      addNotification(`💡 ${relayNames[relayNum - 1]} — ${isOn ? 'ON' : 'OFF'}`, isOn ? 'success' : 'info');
+    })
+    .catch((err) => {
+      if (checkbox) checkbox.checked = !checkbox.checked;
+      showToast(`❌ Gagal: ${err.message}`);
+      console.error('Relay error:', err);
+    });
 }
 
 // ==================== TOAST NOTIFICATION ====================
@@ -272,12 +779,15 @@ function showToast(msg) {
     max-width: 320px;
     font-family: 'Poppins', sans-serif;
   `;
-  toast.innerHTML = `✅ ${msg}`;
+  toast.textContent = msg;
   document.body.appendChild(toast);
 
-  const style = document.createElement('style');
-  style.textContent = `@keyframes slide-toast { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }`;
-  document.head.appendChild(style);
+  if (!document.getElementById('toast-style')) {
+    const style = document.createElement('style');
+    style.id = 'toast-style';
+    style.textContent = '@keyframes slide-toast { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }';
+    document.head.appendChild(style);
+  }
 
   setTimeout(() => {
     toast.style.opacity = '0';
@@ -288,24 +798,21 @@ function showToast(msg) {
 }
 
 // ==================== HISTORY TABLE ====================
-const activityLog = [
-  { time: '14:32:07', type: 'RFID', activity: 'Kartu ditap', value: 'UID: A4:B2:C9:D1', status: 'success', statusText: 'Berhasil' },
-  { time: '14:18:44', type: 'RFID', activity: 'Kartu ditap', value: 'UID: FF:22:AB:09', status: 'danger', statusText: 'Ditolak' },
-  { time: '14:05:12', type: 'Relay', activity: 'Lampu Ruang Tamu', value: 'ON', status: 'success', statusText: 'Aktif' },
-  { time: '13:58:30', type: 'Pintu', activity: 'Pintu dibuka', value: 'Servo 90°', status: 'info', statusText: 'Berhasil' },
-  { time: '13:45:22', type: 'Jemuran', activity: 'Jemuran masuk otomatis', value: 'Hujan 78%', status: 'warning', statusText: 'Otomatis' },
-  { time: '13:40:01', type: 'Gas', activity: 'Gas normal', value: '142 ppm', status: 'success', statusText: 'Normal' },
-  { time: '13:30:15', type: 'Relay', activity: 'Lampu Kamar', value: 'OFF', status: 'warning', statusText: 'Nonaktif' },
-  { time: '13:10:55', type: 'RFID', activity: 'Kartu ditap', value: 'UID: A4:B2:C9:D1', status: 'success', statusText: 'Berhasil' },
-  { time: '12:55:09', type: 'Jemuran', activity: 'Jemuran keluar manual', value: 'Cerah', status: 'success', statusText: 'Manual' },
-  { time: '12:30:44', type: 'Gas', activity: 'Gas terdeteksi tinggi', value: '432 ppm', status: 'danger', statusText: 'Bahaya' },
-];
-
 function renderHistory(data) {
   const tbody = document.getElementById('activity-tbody');
   if (!tbody) return;
   tbody.innerHTML = '';
-  data.forEach((row, i) => {
+
+  if (!data.length) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td class="td-muted" colspan="6" style="text-align:center;padding:24px">Belum ada data aktivitas.</td>';
+    tbody.appendChild(tr);
+    return;
+  }
+
+  // Show max 20 entries per page
+  const pageData = data.slice(0, 20);
+  pageData.forEach((row, i) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="td-muted">${i + 1}</td>
@@ -317,43 +824,48 @@ function renderHistory(data) {
     `;
     tbody.appendChild(tr);
   });
+
+  // Update footer
+  const footer = document.querySelector('.table-footer span');
+  if (footer) {
+    footer.textContent = `Menampilkan ${pageData.length} dari ${data.length} aktivitas`;
+  }
 }
 
 function filterTable(query) {
   const filtered = activityLog.filter(row =>
-    Object.values(row).some(v => v.toLowerCase().includes(query.toLowerCase()))
+    Object.values(row).some(v => String(v).toLowerCase().includes(query.toLowerCase()))
   );
   renderHistory(filtered);
-}
-
-function addHistoryEntry(type, activity, value, status) {
-  const now = new Date();
-  const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-  const statusMap = { success: 'Berhasil', warning: 'Otomatis', danger: 'Bahaya', info: 'Manual' };
-  activityLog.unshift({ time, type, activity, value, status, statusText: statusMap[status] || status });
-  if (activityLog.length > 50) activityLog.pop();
-  renderHistory(activityLog);
 }
 
 // ==================== LOGOUT ====================
 function logout() {
   if (confirm('Yakin ingin keluar dari sistem?')) {
-    window.location.href = 'index.html';
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+      firebase.auth().signOut().then(() => {
+        window.location.href = 'index.html';
+      });
+    } else {
+      window.location.href = 'index.html';
+    }
   }
 }
 
 // ==================== INIT ====================
 document.addEventListener('DOMContentLoaded', () => {
   renderHistory(activityLog);
-  updateSensors();
 
-  // Animate cards on load
   document.querySelectorAll('.card-animate').forEach((card, i) => {
     card.style.animationDelay = (0.05 + i * 0.06) + 's';
   });
 
-  // Handle responsive sidebar
   if (window.innerWidth < 900) {
     document.getElementById('sidebarOverlay').classList.add('hidden');
   }
+
+  // Initialize Firebase listeners
+  setTimeout(() => {
+    initFirebaseListeners();
+  }, 500);
 });

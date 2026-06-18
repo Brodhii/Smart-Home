@@ -49,7 +49,7 @@
               <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
               <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
             </svg>
-            <input type="email" id="email" class="form-input" placeholder="admin@smarthome.id" required/>
+            <input type="email" id="email" class="form-input" placeholder="Email pengguna" required/>
           </div>
         </div>
 
@@ -86,14 +86,11 @@
         </button>
 
         <output id="login-error" class="login-error" style="display:none">
-          Email atau password salah. Coba lagi.
+          Firebase Authentication belum dikonfigurasi.
         </output>
       </form>
 
-      <!-- Demo credentials hint -->
-      <p class="demo-hint">
-        <span>Demo:</span> admin@smarthome.id / admin123
-      </p>
+      <!-- Firebase Authentication will be connected here. -->
     </section>
 
     <!-- Side illustration -->
@@ -107,23 +104,23 @@
         <ul class="ill-stats" style="list-style: none;">
           <li class="ill-stat">
             <span class="ill-stat-label">Sensor Aktif</span>
-            <strong class="ill-stat-val">5</strong>
+            <strong class="ill-stat-val">-</strong>
           </li>
           <li class="ill-stat">
             <span class="ill-stat-label">Perangkat</span>
-            <strong class="ill-stat-val">3</strong>
+            <strong class="ill-stat-val">-</strong>
           </li>
           <li class="ill-stat">
             <span class="ill-stat-label">Keamanan</span>
-            <strong class="ill-stat-val good">Aman</strong>
+            <strong class="ill-stat-val good">-</strong>
           </li>
         </ul>
         <ul class="ill-sensors" style="list-style: none;">
-          <li class="ill-sensor-row"><span class="ill-sensor-name">🌬️ Gas MQ-135</span><span class="ill-sensor-badge good">Normal</span></li>
-          <li class="ill-sensor-row"><span class="ill-sensor-name">💡 Cahaya LDR</span><span class="ill-sensor-badge warn">Redup</span></li>
-          <li class="ill-sensor-row"><span class="ill-sensor-name">🌧️ Sensor Hujan</span><span class="ill-sensor-badge good">Cerah</span></li>
-          <li class="ill-sensor-row"><span class="ill-sensor-name">📡 Ultrasonik</span><span class="ill-sensor-badge good">Clear</span></li>
-          <li class="ill-sensor-row"><span class="ill-sensor-name">🔑 RFID RC522</span><span class="ill-sensor-badge good">Aktif</span></li>
+          <li class="ill-sensor-row"><span class="ill-sensor-name">🌬️ Gas MQ-135</span><span class="ill-sensor-badge good">Belum ada data</span></li>
+          <li class="ill-sensor-row"><span class="ill-sensor-name">💡 Cahaya LDR</span><span class="ill-sensor-badge good">Belum ada data</span></li>
+          <li class="ill-sensor-row"><span class="ill-sensor-name">🌧️ Sensor Hujan</span><span class="ill-sensor-badge good">Belum ada data</span></li>
+          <li class="ill-sensor-row"><span class="ill-sensor-name">📡 Ultrasonik</span><span class="ill-sensor-badge good">Belum ada data</span></li>
+          <li class="ill-sensor-row"><span class="ill-sensor-name">🔑 RFID RC522</span><span class="ill-sensor-badge good">Belum ada data</span></li>
         </ul>
       </article>
       <section class="ill-tagline">
@@ -133,7 +130,23 @@
     </aside>
   </main>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDQ9yhVcWEndxoSFUBqDHXeFgNYRiN96XM",
+      authDomain: "smarthome-33d1e.firebaseapp.com",
+      databaseURL: "https://smarthome-33d1e-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "smarthome-33d1e",
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
     function togglePassword() {
       const input = document.getElementById('password');
       input.type = input.type === 'password' ? 'text' : 'password';
@@ -141,26 +154,58 @@
 
     function handleLogin() {
       const email = document.getElementById('email').value;
-      const pass = document.getElementById('password').value;
+      const password = document.getElementById('password').value;
       const btn = document.querySelector('.btn-login');
       const err = document.getElementById('login-error');
 
       btn.classList.add('loading');
       err.style.display = 'none';
 
-      setTimeout(() => {
-        btn.classList.remove('loading');
-        if (email === 'admin@smarthome.id' && pass === 'admin123') {
-          btn.classList.add('success');
-          btn.querySelector('.btn-text').textContent = 'Berhasil!';
-          setTimeout(() => window.location.href = 'dashboard.html', 800);
-        } else {
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          btn.classList.remove('loading');
+          // Login berhasil - redirect ke dashboard
+          window.location.href = 'dashboard.html';
+        })
+        .catch((error) => {
+          btn.classList.remove('loading');
+
+          // Tampilkan pesan error yang lebih ramah
+          let errorMsg = 'Login gagal. ';
+          switch (error.code) {
+            case 'auth/user-not-found':
+              errorMsg += 'Email tidak terdaftar.';
+              break;
+            case 'auth/wrong-password':
+              errorMsg += 'Password salah.';
+              break;
+            case 'auth/invalid-email':
+              errorMsg += 'Format email tidak valid.';
+              break;
+            case 'auth/too-many-requests':
+              errorMsg += 'Terlalu banyak percobaan. Coba lagi nanti.';
+              break;
+            case 'auth/invalid-credential':
+              errorMsg += 'Email atau password salah.';
+              break;
+            default:
+              errorMsg += error.message;
+          }
+
+          err.textContent = errorMsg;
           err.style.display = 'flex';
           document.querySelector('.login-card').classList.add('shake');
           setTimeout(() => document.querySelector('.login-card').classList.remove('shake'), 500);
-        }
-      }, 1200);
+        });
     }
+
+    // Cek apakah user sudah login
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // Sudah login, langsung ke dashboard
+        window.location.href = 'dashboard.html';
+      }
+    });
   </script>
 </body>
 </html>
